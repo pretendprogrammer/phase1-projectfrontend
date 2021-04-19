@@ -1,0 +1,36 @@
+* {
+  text-decoration: none;
+}
+
+h1, #search-container {
+  text-align: center;
+}
+
+#posts-div { 
+  background-color: blueviolet;
+  display: flex;
+  flex-direction: column;
+}
+
+/* section, li {
+  justify-content: center;
+} */
+
+#posts-div div {
+  background-color: pink;
+  display: flex;
+  flex-direction: row;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  list-style-type: none;
+  justify-content: center;
+  align-items: center;
+}
+
+div.likes-div {
+  display: flex;
+  text-align: center;
+  background-color: bisque;
+  flex-direction: column;
+}
+

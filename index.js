@@ -3,7 +3,7 @@ const reviewForm = document.querySelector("#review-form")
 const resultsUl = document.querySelector("#results-ul")
 const videoTitle = document.querySelector("div#review-div h2")
 const videoImage = document.querySelector("div#review-div img")
-const reviewsList = document.querySelector("#posts-ul")
+const reviewsDiv = document.querySelector("#posts-div")
 
 const URL = "http://localhost:3000/videos"
 
@@ -17,11 +17,12 @@ fetch(URL)
 
 
 function videoToHTML(videoPOJO) {
-    let newListItem = document.createElement("li")
+    let newVideoDiv = document.createElement("div")
     let newThumbnail = document.createElement("img")
     newThumbnail.src = videoPOJO.image
 
     let newLikesDiv = document.createElement("div")
+        newLikesDiv.className = "likes-div"
     let likeBtn = document.createElement('button')
         likeBtn.innerText = "Like"
         likeBtn.addEventListener('click', function(element) {changeLikeCount(element, videoPOJO.id, 'add')})
@@ -31,11 +32,14 @@ function videoToHTML(videoPOJO) {
     let counter = document.createElement("p")
         counter.innerText = videoPOJO.likes
         counter.id = 'counter'
-    newLikesDiv.append(dislikeBtn,counter,likeBtn)
-    
-    newListItem.append(newThumbnail,videoPOJO.title,newLikesDiv)
+    newLikesDiv.append(likeBtn, counter, dislikeBtn)
 
-    reviewsList.append(newListItem)
+    let videoTitle = document.createElement('p')
+    videoTitle.innerText = videoPOJO.title
+    
+    newVideoDiv.append(newThumbnail, videoTitle, newLikesDiv)
+
+    reviewsDiv.append(newVideoDiv)
 }
 
 function changeLikeCount(element, objectId, method) {
