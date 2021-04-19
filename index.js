@@ -1,0 +1,6 @@
+const searchForm = document.querySelector("#search-form")
+const reviewForm = document.querySelector("#review-form")
+const resultsUl = document.querySelector("#results-ul")
+const videoTitle = document.querySelector("div#review-div h2")
+const videoImage = document.querySelector("div#review-div img")
+const reviewsList = document.querySelector("#posts-ul")
