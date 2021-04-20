@@ -63,6 +63,7 @@ function videoObjectToHTML(videoPOJO) {
         newThumbnail.src = videoPOJO.image
     let newVideoLink = document.createElement("a")
         newVideoLink.href = linkToYTVideo+videoPOJO.videoId
+        newVideoLink.target = "_blank"
         newVideoLink.append(newThumbnail)
 
     let newLikesDiv = document.createElement("div")
