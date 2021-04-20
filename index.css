@@ -25,7 +25,9 @@ h1, #search-container {
 } */
 
 #posts-div div {
-  border: 2px solid black;
+  color: rgb(56, 54, 54);
+  background: rgb(213, 216, 218);
+  border: 2px solid rgb(59, 59, 59);
   border-radius: 15px;
   margin-bottom: 2em;
   margin-top: 2em;
@@ -38,6 +40,9 @@ h1, #search-container {
 div.likes-div {
   font-family: 'Roboto', sans-serif;
   flex-direction: column;
+  border: hidden;
+  justify-content: flex-end;
+  margin-right: 0em;
   /* display: flex; */
   /* text-align: center; */
   /* padding-left: 0em;
@@ -45,7 +50,15 @@ div.likes-div {
 }
 
 div.likes-div p {
-  margin-right: 1em;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+
+  background: #fff;
+  border: 2px solid #666;
+  color: #666;
+  text-align: center;
 }
 
 div#posts-div div {
@@ -59,10 +72,32 @@ div#posts-div div {
 img {
   margin-right: 10em;
   border-radius: 15px;
-  margin-bottom: 1em;
+  margin-bottom: 3em;
+  /* border: 2px solid rgb(59, 59, 59) */
 }
 
+button {
+  display: inline-block;
+  padding: 15px 25px;
+  /* font-size: 24px; */
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #f70000;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 2px #999;
+}
 
+button:hover {background-color: #ca1111c4}
+
+button:active {
+  background-color: #c71212;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
 
 
 
