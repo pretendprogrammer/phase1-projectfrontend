@@ -50,9 +50,10 @@ div.likes-div {
 }
 
 div.likes-div p {
+  display: block;
   border-radius: 50%;
   width: 36px;
-  height: 36px;
+  height: 29px;
   padding: 8px;
 
   background: #fff;
