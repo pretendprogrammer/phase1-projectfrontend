@@ -4,11 +4,13 @@ const resultsUl = document.querySelector("#results-ul")
 const videoInfo = document.querySelector("div#review-div h2")
 const videoImage = document.querySelector("div#review-div img")
 const reviewsDiv = document.querySelector("#posts-div")
+const resultsDiv = document.querySelector("#results-container")
 
 const URL = "http://localhost:3000/videos"
 const TYURL = "https://googleapis.com/youtube/v3/search"
 
 let localDatabase = {}
+const API_KEY
 
 
 fetch(URL)
@@ -22,13 +24,15 @@ fetch(URL)
 
 searchForm.addEventListener('submit', function(event){
     event.preventDefault()
-    console.log(event.target[search-query].value)
+    let queryText = event.target['search-query'].value
+    processSearch(queryText)
 })
 
-function processSearch() {
-    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=pizza&key=AIzaSyB25gbW7CbkYq8kZC4S9c-be1lJKKHf7-U`)
+function processSearch(queryText) {
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${queryText}&${API_KEY}`)
         .then(res => res.json())
         .then(resultsObject => {
+            resultsDiv.style.display = 'inline-block'
             resultsObject.items.forEach(resultObject => {
                 console.log(resultObject)
                 let videoId = resultObject.id.videoId
@@ -40,6 +44,8 @@ function processSearch() {
                     newResultThumbnail.src = thumbnailUrl
                 let newResultTitle = document.createElement('p')
                     newResultTitle.innerText = title
+                let newResultButton = document.createElement('button')
+                    newResultButton.innerText = 'Select'
                 newResultLi.append(newResultThumbnail,newResultTitle)
 
                 resultsUl.append(newResultLi)
