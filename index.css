@@ -1,13 +1,21 @@
 * {
-  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+  text-shadow: 2px 2px #ff0000;
 }
 
 h1, #search-container {
   text-align: center;
 }
 
+#results-container {
+  border: 1em, solid black;
+}
+
 #posts-div { 
-  background-color: blueviolet;
+  /* background-color: rgb(15, 15, 15); */
   display: flex;
   flex-direction: column;
 }
@@ -17,20 +25,45 @@ h1, #search-container {
 } */
 
 #posts-div div {
-  background-color: pink;
+  border: 2px solid black;
+  border-radius: 15px;
+  margin-bottom: 2em;
+  margin-top: 2em;
+  /* background-color: rgb(228, 225, 225); */
   display: flex;
-  flex-direction: row;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  list-style-type: none;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: space-evenly; */
+  align-items: flex-end;
 }
 
 div.likes-div {
-  display: flex;
-  text-align: center;
-  background-color: bisque;
+  font-family: 'Roboto', sans-serif;
   flex-direction: column;
+  /* display: flex; */
+  /* text-align: center; */
+  /* padding-left: 0em;
+  margin-left: 0em; */
 }
+
+div.likes-div p {
+  margin-right: 1em;
+}
+
+div#posts-div div {
+  flex: 1;
+  padding: .5em;
+  margin-left: 2em;
+  margin-right: 2em;
+  justify-content: space-between
+}
+
+img {
+  margin-right: 10em;
+  border-radius: 15px;
+  margin-bottom: 1em;
+}
+
+
+
+
+
 
