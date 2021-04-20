@@ -26,6 +26,7 @@ h3 {
 
 #results-container {
   border: 1em, solid black;
+  display: none;
 }
 
 div#review-div {
