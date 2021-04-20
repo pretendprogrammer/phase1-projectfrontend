@@ -7,7 +7,7 @@ const reviewsDiv = document.querySelector("#posts-div")
 const resultsDiv = document.querySelector("#results-container")
 
 const URL = "http://localhost:3000/videos"
-const YTURL = "https://googleapis.com/youtube/v3/search?part=snippet&q="
+const YTURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q="
 const linkToYTVideo = 'https://www.youtube.com/watch?v='
 
 let localDatabase = {}
@@ -29,7 +29,7 @@ searchForm.addEventListener('submit', function(event){
 })
 
 function processSearch(queryText) {
-    fetch(`${linkToYTVideo}${queryText}&key=${API_KEY}`)
+    fetch(`${YTURL}${queryText}&key=${API_KEY}`)
         .then(res => res.json())
         .then(resultsObject => {
             resultsDiv.style.display = 'inline-block'
@@ -58,14 +58,16 @@ function processSearch(queryText) {
 
 function videoObjectToHTML(videoPOJO) {
     let newVideoDiv = document.createElement("div")
+
     let newThumbnail = document.createElement("img")
         newThumbnail.src = videoPOJO.image
     let newVideoLink = document.createElement("a")
         newVideoLink.href = linkToYTVideo+videoPOJO.videoId
         newVideoLink.append(newThumbnail)
-    
+
     let newLikesDiv = document.createElement("div")
         newLikesDiv.className = "likes-div"
+
     let likeBtn = document.createElement('button')
         likeBtn.innerText = "Like"
         likeBtn.value = 'false'
@@ -74,17 +76,19 @@ function videoObjectToHTML(videoPOJO) {
         dislikeBtn.innerText = "Dislike"
         dislikeBtn.value = 'false'
         dislikeBtn.addEventListener('click', function(event) {changeLikeCount(event, videoPOJO.id, 'subtract')})
-
     let counter = document.createElement("p")
         counter.innerText = videoPOJO.likes
         counter.id = 'counter'
+
     newLikesDiv.append(likeBtn, counter, dislikeBtn)
 
     let videoInfo = document.createElement('div')
+
     let videoTitle = document.createElement('h3')
         videoTitle.innerText = videoPOJO.title
     let videoReview = document.createElement('p')
         videoReview.innerText = videoPOJO.reviews[0]
+
     videoInfo.append(videoTitle, videoReview)
     
     newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv)
