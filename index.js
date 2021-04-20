@@ -28,10 +28,12 @@ function videoToHTML(videoPOJO) {
         newLikesDiv.className = "likes-div"
     let likeBtn = document.createElement('button')
         likeBtn.innerText = "Like"
-        likeBtn.addEventListener('click', function(element) {changeLikeCount(element, videoPOJO.id, 'add')})
+        likeBtn.value = 'false'
+        likeBtn.addEventListener('click', function(event) {changeLikeCount(event, videoPOJO.id, 'add')})
     let dislikeBtn = document.createElement('button')
         dislikeBtn.innerText = "Dislike"
-        dislikeBtn.addEventListener('click', function(element) {changeLikeCount(element, videoPOJO.id, 'subtract')})
+        dislikeBtn.value = 'false'
+        dislikeBtn.addEventListener('click', function(event) {changeLikeCount(event, videoPOJO.id, 'subtract')})
 
     let counter = document.createElement("p")
         counter.innerText = videoPOJO.likes
@@ -46,28 +48,35 @@ function videoToHTML(videoPOJO) {
     reviewsDiv.append(newVideoDiv)
 }
 
-function changeLikeCount(element, objectId, method) {
-    console.log(element.path[1].querySelector("#counter").innerText)
-    let incrementer
-    method === 'add' ? incrementer = 1 : incrementer = -1
-    fetch(`${URL}/${objectId}`)
-        .then(res => res.json())
-        .then(object => {
-            let currentCounterValue = object.likes
-            let newCounterValue = currentCounterValue + incrementer
+function changeLikeCount(event, objectId, method) {
+    let button = event.path[0]
+    button.disabled = 'true'
 
-            let config = {
-                method: "PATCH",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({"likes": newCounterValue})
-            }
-            fetch(`${URL}/${objectId}`, config)
-                .then(res => res.json())
-                .then(updatedObject => {
-                    localDatabase[updatedObject.id].likes = updatedObject.likes
-                    element.path[1].querySelector("#counter").innerText = localDatabase[updatedObject.id].likes
-                })
+    button.value === 'true'? button.value = 'false' : button.value = 'true'
+    console.log(button.value)
+
+    let incrementer
+    (method === 'add' && button.value === 'true' || method === 'subtract' && button.value === 'false') ? incrementer = 1 : incrementer = -1
+
+    let currentCounterValue = localDatabase[objectId].likes
+    let newCounterValue = currentCounterValue + incrementer
+
+    let config = {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"likes": newCounterValue})
+    }
+    fetch(`${URL}/${objectId}`, config)
+        .then(res => res.json())
+        .then(updatedObject => {
+            localDatabase[updatedObject.id].likes = updatedObject.likes
+            event.path[1].querySelector("#counter").innerText = localDatabase[updatedObject.id].likes
+            button.disabled = false
+        })
+        .catch(error => {
+            console.log(error)
+            button.disabled = false
         })
 }
