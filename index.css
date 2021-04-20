@@ -1,4 +1,5 @@
 * {
+  max-width: 100%;
   font-family: 'Poppins', sans-serif;
 }
 
@@ -24,6 +25,10 @@ h3 {
   /* text-decoration: underline; */
 }
 
+div#results-container h3 {
+  text-align: center;
+}
+
 #results-container {
   border: 1em, solid black;
   display: none;
@@ -31,6 +36,11 @@ h3 {
 
 div#review-div {
   display: none;
+}
+
+ul#results-ul {
+  display: flex;
+  list-style: none;
 }
 
 #posts-div { 
