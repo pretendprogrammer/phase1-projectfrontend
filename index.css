@@ -2,9 +2,19 @@
   font-family: 'Poppins', sans-serif;
 }
 
-h1 {
+#header-div {
+  display: flex;
   text-shadow: 2px 2px #ff0000;
-  font-size: 80px;
+  font-size: 54px;
+  color: rgb(56, 54, 54);
+}
+
+#header-div {
+  background: rgb(213, 216, 218);
+  border: 2px solid rgb(59, 59, 59);
+  border-radius: 15px;
+  margin-left: 5em;
+  margin-right: 5em;
 }
 
 h1, #search-container {
@@ -110,6 +120,10 @@ button:active {
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
+/* 
+div#posts-div div p{
+ 
+} */
 
 
 
