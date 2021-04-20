@@ -7,10 +7,13 @@ const reviewsDiv = document.querySelector("#posts-div")
 
 const URL = "http://localhost:3000/videos"
 
+let localDatabase = {}
+
 fetch(URL)
     .then(res => res.json())
     .then(videosArray => {
         videosArray.forEach(videoObject => {
+            localDatabase[videoObject.id] = videoObject
             videoToHTML(videoObject)
         })
     })
@@ -28,6 +31,7 @@ function videoToHTML(videoPOJO) {
         likeBtn.addEventListener('click', function(element) {changeLikeCount(element, videoPOJO.id, 'add')})
     let dislikeBtn = document.createElement('button')
         dislikeBtn.innerText = "Dislike"
+        dislikeBtn.addEventListener('click', function(element) {changeLikeCount(element, videoPOJO.id, 'subtract')})
 
     let counter = document.createElement("p")
         counter.innerText = videoPOJO.likes
@@ -62,8 +66,8 @@ function changeLikeCount(element, objectId, method) {
             fetch(`${URL}/${objectId}`, config)
                 .then(res => res.json())
                 .then(updatedObject => {
-                    //update memory
-                    //update dom
+                    localDatabase[updatedObject.id].likes = updatedObject.likes
+                    element.path[1].querySelector("#counter").innerText = localDatabase[updatedObject.id].likes
                 })
         })
 }
