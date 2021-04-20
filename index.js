@@ -12,7 +12,6 @@ const TYURL = "https://googleapis.com/youtube/v3/search"
 let localDatabase = {}
 const API_KEY = config.MY_SECRET_API_KEY
 
-
 fetch(URL)
     .then(res => res.json())
     .then(videosArray => {
@@ -29,7 +28,7 @@ searchForm.addEventListener('submit', function(event){
 })
 
 function processSearch(queryText) {
-    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${queryText}&${API_KEY}`)
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${queryText}&key=${API_KEY}`)
         .then(res => res.json())
         .then(resultsObject => {
             resultsDiv.style.display = 'inline-block'
