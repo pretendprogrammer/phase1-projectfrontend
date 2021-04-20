@@ -1,7 +1,7 @@
 const searchForm = document.querySelector("#search-form")
 const reviewForm = document.querySelector("#review-form")
 const resultsUl = document.querySelector("#results-ul")
-const videoTitle = document.querySelector("div#review-div h2")
+const videoInfo = document.querySelector("div#review-div h2")
 const videoImage = document.querySelector("div#review-div img")
 const reviewsDiv = document.querySelector("#posts-div")
 
@@ -40,10 +40,14 @@ function videoToHTML(videoPOJO) {
         counter.id = 'counter'
     newLikesDiv.append(likeBtn, counter, dislikeBtn)
 
-    let videoTitle = document.createElement('p')
-    videoTitle.innerText = videoPOJO.title
+    let videoInfo = document.createElement('div')
+    let videoTitle = document.createElement('h3')
+        videoTitle.innerText = videoPOJO.title
+    let videoReview = document.createElement('p')
+        videoReview.innerText = videoPOJO.reviews[0]
+    videoInfo.append(videoTitle, videoReview)
     
-    newVideoDiv.append(newThumbnail, videoTitle, newLikesDiv)
+    newVideoDiv.append(newThumbnail, videoInfo, newLikesDiv)
 
     reviewsDiv.append(newVideoDiv)
 }
@@ -51,9 +55,7 @@ function videoToHTML(videoPOJO) {
 function changeLikeCount(event, objectId, method) {
     let button = event.path[0]
     button.disabled = 'true'
-
     button.value === 'true'? button.value = 'false' : button.value = 'true'
-    console.log(button.value)
 
     let incrementer
     (method === 'add' && button.value === 'true' || method === 'subtract' && button.value === 'false') ? incrementer = 1 : incrementer = -1
