@@ -10,7 +10,7 @@ const URL = "http://localhost:3000/videos"
 const TYURL = "https://googleapis.com/youtube/v3/search"
 
 let localDatabase = {}
-const API_KEY
+const API_KEY = config.MY_SECRET_API_KEY
 
 
 fetch(URL)
@@ -97,14 +97,14 @@ function changeLikeCount(event, objectId, method) {
     let currentCounterValue = localDatabase[objectId].likes
     let newCounterValue = currentCounterValue + incrementer
 
-    let config = {
+    let patchConfig = {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({"likes": newCounterValue})
     }
-    fetch(`${URL}/${objectId}`, config)
+    fetch(`${URL}/${objectId}`, patchConfig)
         .then(res => res.json())
         .then(updatedObject => {
             localDatabase[updatedObject.id].likes = updatedObject.likes
