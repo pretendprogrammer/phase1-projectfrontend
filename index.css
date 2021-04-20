@@ -16,6 +16,10 @@ h1, #search-container {
   margin: 5em;
 }
 
+h3 {
+  font-size: 1.5em;
+}
+
 #results-container {
   border: 1em, solid black;
 }
