@@ -3,8 +3,11 @@ const reviewForm = document.querySelector("#review-form")
 const resultsUl = document.querySelector("#results-ul")
 const videoInfo = document.querySelector("div#review-div h2")
 const videoImage = document.querySelector("div#review-div img")
-const reviewsDiv = document.querySelector("#posts-div")
+const postedReviewsDiv = document.querySelector("#posts-div")
 const resultsDiv = document.querySelector("#results-container")
+const reviewToEnterDiv = document.querySelector("#review-div")
+const titleOfVideoToReview = document.querySelector("#videoToReviewTitle")
+const imageOfVideoToReview = document.querySelector("#videoToReviewImage")
 
 const URL = "http://localhost:3000/videos"
 const YTURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q="
@@ -52,15 +55,20 @@ function processSearch(queryText) {
                 let newResultButton = document.createElement('button')
                     newResultButton.innerText = 'Select'
                     newResultButton.addEventListener('click', function(){
-                        console.log('I was clicked')
-                        resultsDiv.style.display = 'None'
-                        reviewForm.style.display = 'inline-block'
+                        populateReviewForm(thumbnailUrl,title)
                     })
                 newResultLi.append(newResultLink,newResultTitle,newResultButton)
 
                 resultsUl.append(newResultLi)
             })
         })
+}
+
+function populateReviewForm(thumbnailString, titleString) {
+    resultsDiv.style.display = 'None'
+    reviewToEnterDiv.style.display = 'inline-block'
+    titleOfVideoToReview.innerText = titleString
+    imageOfVideoToReview.src = thumbnailString
 }
 
 function videoObjectToHTML(videoPOJO) {
@@ -101,7 +109,7 @@ function videoObjectToHTML(videoPOJO) {
     
     newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv)
 
-    reviewsDiv.append(newVideoDiv)
+    postedReviewsDiv.append(newVideoDiv)
 }
 
 function changeLikeCount(event, objectId, method) {
