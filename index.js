@@ -42,14 +42,21 @@ function processSearch(queryText) {
                 let newResultLi = document.createElement('li')
                 let newResultThumbnail = document.createElement('img')
                     newResultThumbnail.src = thumbnailUrl
+                let newResultLink = document.createElement("a")
+                    newResultLink.href = linkToYTVideo+videoId
+                    newResultLink.target = "_blank"
+                newResultLink.append(newResultThumbnail)
+
                 let newResultTitle = document.createElement('p')
                     newResultTitle.innerText = title
                 let newResultButton = document.createElement('button')
                     newResultButton.innerText = 'Select'
                     newResultButton.addEventListener('click', function(){
                         console.log('I was clicked')
+                        resultsDiv.style.display = 'None'
+                        reviewForm.style.display = 'inline-block'
                     })
-                newResultLi.append(newResultThumbnail,newResultTitle)
+                newResultLi.append(newResultLink,newResultTitle,newResultButton)
 
                 resultsUl.append(newResultLi)
             })
