@@ -6,8 +6,10 @@ const videoImage = document.querySelector("div#review-div img")
 const reviewsDiv = document.querySelector("#posts-div")
 
 const URL = "http://localhost:3000/videos"
+const TYURL = "https://googleapis.com/youtube/v3/search"
 
 let localDatabase = {}
+
 
 fetch(URL)
     .then(res => res.json())
@@ -18,6 +20,32 @@ fetch(URL)
         })
     })
 
+searchForm.addEventListener('submit', function(event){
+    event.preventDefault()
+    console.log(event.target[search-query].value)
+})
+
+function processSearch() {
+    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=pizza&key=AIzaSyB25gbW7CbkYq8kZC4S9c-be1lJKKHf7-U`)
+        .then(res => res.json())
+        .then(resultsObject => {
+            resultsObject.items.forEach(resultObject => {
+                console.log(resultObject)
+                let videoId = resultObject.id.videoId
+                let {channelTitle, title} = resultObject.snippet
+                let thumbnailUrl = resultObject.snippet.thumbnails.default.url
+
+                let newResultLi = document.createElement('li')
+                let newResultThumbnail = document.createElement('img')
+                    newResultThumbnail.src = thumbnailUrl
+                let newResultTitle = document.createElement('p')
+                    newResultTitle.innerText = title
+                newResultLi.append(newResultThumbnail,newResultTitle)
+
+                resultsUl.append(newResultLi)
+            })
+        })
+}
 
 function videoToHTML(videoPOJO) {
     let newVideoDiv = document.createElement("div")
