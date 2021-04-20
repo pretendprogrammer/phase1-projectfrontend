@@ -4,6 +4,7 @@
 
 h1 {
   text-shadow: 2px 2px #ff0000;
+  font-size: 80px;
 }
 
 h1, #search-container {
@@ -24,7 +25,7 @@ h1, #search-container {
   justify-content: center;
 } */
 
-#posts-div div {
+#posts-div>div {
   color: rgb(56, 54, 54);
   background: rgb(213, 216, 218);
   border: 2px solid rgb(59, 59, 59);
@@ -33,17 +34,16 @@ h1, #search-container {
   margin-top: 2em;
   /* background-color: rgb(228, 225, 225); */
   display: flex;
-  /* justify-content: space-evenly; */
-  align-items: flex-end;
+  /* flex-direction: row; */
+  justify-content: space-between;
+  align-items: center;
 }
 
 div.likes-div {
   font-family: 'Roboto', sans-serif;
-  flex-direction: column;
-  border: hidden;
   justify-content: flex-end;
   margin-right: 0em;
-  /* display: flex; */
+  display: flex;
   /* text-align: center; */
   /* padding-left: 0em;
   margin-left: 0em; */
@@ -59,6 +59,8 @@ div.likes-div p {
   border: 2px solid #666;
   color: #666;
   text-align: center;
+  margin-left: 2em;
+  margin-right: 2em;
 }
 
 div#posts-div div {
@@ -66,20 +68,29 @@ div#posts-div div {
   padding: .5em;
   margin-left: 2em;
   margin-right: 2em;
-  justify-content: space-between
+  /* justify-content: space-between */
 }
 
 img {
-  margin-right: 10em;
+  margin-top: 2em;
+  margin-right: 15em;
   border-radius: 15px;
   margin-bottom: 3em;
+  margin-left: 2em;
+  
   /* border: 2px solid rgb(59, 59, 59) */
+
+  width: 190px;
+  height: 190px;
+  border:2px transparent;
+  box-shadow: 0px 6px 5px #999;
+  border-radius:190px;
 }
 
 button {
   display: inline-block;
-  padding: 15px 25px;
-  /* font-size: 24px; */
+  padding: 20px 25px;
+  font-size: 15px;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
