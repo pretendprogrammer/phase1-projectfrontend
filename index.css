@@ -20,6 +20,10 @@ h1, #search-container {
   border: 1em, solid black;
 }
 
+div#review-div {
+  display: none;
+}
+
 #posts-div { 
   /* background-color: rgb(15, 15, 15); */
   display: flex;
@@ -83,14 +87,18 @@ img {
   border-radius: 15px;
   margin-bottom: 3em;
   margin-left: 2em;
-  
-  /* border: 2px solid rgb(59, 59, 59) */
 
+  transition: transform .2s; /* Animation */
+  
   width: 190px;
   height: 190px;
   border:2px transparent;
   box-shadow: 0px 6px 5px #999;
   border-radius:190px;
+}
+
+img:hover {
+  transform: scale(1.1);
 }
 
 button {
