@@ -7,7 +7,8 @@ const reviewsDiv = document.querySelector("#posts-div")
 const resultsDiv = document.querySelector("#results-container")
 
 const URL = "http://localhost:3000/videos"
-const TYURL = "https://googleapis.com/youtube/v3/search"
+const YTURL = "https://googleapis.com/youtube/v3/search?part=snippet&q="
+const linkToYTVideo = 'https://www.youtube.com/watch?v='
 
 let localDatabase = {}
 const API_KEY = config.MY_SECRET_API_KEY
@@ -17,7 +18,7 @@ fetch(URL)
     .then(videosArray => {
         videosArray.forEach(videoObject => {
             localDatabase[videoObject.id] = videoObject
-            videoToHTML(videoObject)
+            videoObjectToHTML(videoObject)
         })
     })
 
@@ -28,7 +29,7 @@ searchForm.addEventListener('submit', function(event){
 })
 
 function processSearch(queryText) {
-    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${queryText}&key=${API_KEY}`)
+    fetch(`${linkToYTVideo}${queryText}&key=${API_KEY}`)
         .then(res => res.json())
         .then(resultsObject => {
             resultsDiv.style.display = 'inline-block'
@@ -45,6 +46,9 @@ function processSearch(queryText) {
                     newResultTitle.innerText = title
                 let newResultButton = document.createElement('button')
                     newResultButton.innerText = 'Select'
+                    newResultButton.addEventListener('click', function(){
+                        console.log('I was clicked')
+                    })
                 newResultLi.append(newResultThumbnail,newResultTitle)
 
                 resultsUl.append(newResultLi)
@@ -52,11 +56,14 @@ function processSearch(queryText) {
         })
 }
 
-function videoToHTML(videoPOJO) {
+function videoObjectToHTML(videoPOJO) {
     let newVideoDiv = document.createElement("div")
     let newThumbnail = document.createElement("img")
-    newThumbnail.src = videoPOJO.image
-
+        newThumbnail.src = videoPOJO.image
+    let newVideoLink = document.createElement("a")
+        newVideoLink.href = linkToYTVideo+videoPOJO.videoId
+        newVideoLink.append(newThumbnail)
+    
     let newLikesDiv = document.createElement("div")
         newLikesDiv.className = "likes-div"
     let likeBtn = document.createElement('button')
@@ -80,7 +87,7 @@ function videoToHTML(videoPOJO) {
         videoReview.innerText = videoPOJO.reviews[0]
     videoInfo.append(videoTitle, videoReview)
     
-    newVideoDiv.append(newThumbnail, videoInfo, newLikesDiv)
+    newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv)
 
     reviewsDiv.append(newVideoDiv)
 }
