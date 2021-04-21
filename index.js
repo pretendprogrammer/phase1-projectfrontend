@@ -35,6 +35,7 @@ function processSearch(queryText) {
     fetch(`${YTURL}${queryText}&key=${API_KEY}`)
         .then(res => res.json())
         .then(resultsObject => {
+            resultsUl.innerText = ''
             resultsDiv.style.display = 'block'
             resultsObject.items.forEach(resultObject => {
                 let videoId = resultObject.id.videoId
@@ -64,22 +65,42 @@ function processSearch(queryText) {
         })
 }
 
-function populateReviewForm(thumbnailString, titleString,videoIdString,channelIdString) {
+function populateReviewForm(thumbnailString, titleString, videoIdString, channelIdString, update, videoId, reviewElement) {
     resultsDiv.style.display = 'None'
     reviewToEnterDiv.style.display = 'inline-block'
     titleOfVideoToReview.innerText = titleString
     imageOfVideoToReview.src = thumbnailString
+    update ? reviewForm['review-input'].value = reviewElement.innerText : reviewForm['review-input'].value = ''
     reviewForm.addEventListener('submit', function(event){
         event.preventDefault()
-        let newVideoPOJO = {
-            "title": titleString,
-            "channel": channelIdString,
-            "videoId": linkToYTVideo+videoIdString,
-            "image": thumbnailString,
-            "likes": 0,
-            "reviews": [event.target["review-input"].value]
+        if (update) {
+            console.log(`${databaseURL}/${videoId}`)
+            let patchConfig = {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({"reviews": [event.target["review-input"].value]})
             }
-        postVideoPOJO(newVideoPOJO)
+            fetch(`${databaseURL}/${videoId}`, patchConfig)
+                .then(res => res.json())
+                .then(updatedObject => {
+                    localDatabase[videoId].reviews = updatedObject.reviews
+                    reviewElement.innerText = updatedObject.reviews[0]
+                    reviewForm.reset()
+                    reviewToEnterDiv.style.display = 'none'
+                })
+        } else {
+            let newVideoPOJO = {
+                "title": titleString,
+                "channel": channelIdString,
+                "videoId": linkToYTVideo+videoIdString,
+                "image": thumbnailString,
+                "likes": 0,
+                "reviews": [event.target["review-input"].value]
+                }
+            postVideoPOJO(newVideoPOJO)
+        }
     })
 }
 
@@ -128,11 +149,18 @@ function videoObjectToHTML(videoPOJO) {
     let videoInfo = document.createElement('div')
     
     let videoTitle = document.createElement('h3')
-    videoTitle.innerText = videoPOJO.title
+        videoTitle.innerText = videoPOJO.title
     let videoReview = document.createElement('p')
-    videoReview.innerText = videoPOJO.reviews[0]
+        videoReview.innerText = videoPOJO.reviews[0]
+        videoReview.className = "review-p"
+    let videoUpdateButton = document.createElement('button')
+        videoUpdateButton.innerText = "Update"
+        videoUpdateButton.className = "update-btn"
+        videoUpdateButton.addEventListener('click', function(){
+            populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, true, videoPOJO.id, videoReview)
+        })
     
-    videoInfo.append(videoTitle, videoReview)
+    videoInfo.append(videoTitle, videoReview, videoUpdateButton)
     
     let newVideoDiv = document.createElement("div")
         newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv)
