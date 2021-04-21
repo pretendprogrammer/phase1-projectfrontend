@@ -116,7 +116,7 @@ function postVideoPOJO(videoObject) {
         .then(res => res.json())
         .then(postedObject => {
             localDatabase[postedObject.id] = postedObject
-            videoObjectToHTML(postedObject)
+            turnVideoObjectToHTML(postedObject)
             reviewToEnterDiv.style.display = 'none'
         })
 }
