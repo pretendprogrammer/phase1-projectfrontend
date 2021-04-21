@@ -150,22 +150,53 @@ function videoObjectToHTML(videoPOJO) {
     
     let videoTitle = document.createElement('h3')
         videoTitle.innerText = videoPOJO.title
+
     let videoReview = document.createElement('p')
         videoReview.innerText = videoPOJO.reviews[0]
         videoReview.className = "review-p"
+
     let videoUpdateButton = document.createElement('button')
         videoUpdateButton.innerText = "Update"
-        videoUpdateButton.className = "update-btn"
+        videoUpdateButton.className = "review-mod-btn"  
         videoUpdateButton.addEventListener('click', function(){
             populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, true, videoPOJO.id, videoReview)
         })
+
+    let videoDeleteButton = document.createElement('button')
+        videoDeleteButton.innerText = "Delete"
+        videoDeleteButton.className = "review-mod-btn"  
+        videoDeleteButton.addEventListener('click', function(e){
+            e.preventDefault();
+            deleteReview(videoPOJO.id, videoReview)
+        })
     
-    videoInfo.append(videoTitle, videoReview, videoUpdateButton)
+    let updateAndDeleteDiv = document.createElement('div')
+    updateAndDeleteDiv.append(videoUpdateButton, videoDeleteButton)    
+    videoInfo.append(videoTitle, videoReview, updateAndDeleteDiv)
     
     let newVideoDiv = document.createElement("div")
         newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv)
 
     postedReviewsDiv.append(newVideoDiv)
+}
+
+function deleteReview(videoIdNum, videoReviewP) {
+
+  let patchConfig = {
+    method: "PATCH",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({"reviews": [''] })
+}
+
+  fetch(`${databaseURL}/${videoIdNum}`, patchConfig)
+      .then(res => res.json())
+      .then(updatedObject => {
+        console.log(updatedObject)
+        videoReviewP.innerText = " "
+        localDatabase[videoIdNum].reviews = ['']
+      })
 }
 
 function changeLikeCount(event, objectId, method) {
@@ -198,3 +229,4 @@ function changeLikeCount(event, objectId, method) {
             button.disabled = false
         })
 }
+
