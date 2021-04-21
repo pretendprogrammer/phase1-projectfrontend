@@ -32,7 +32,7 @@ function processSearch(queryText) {
     fetch(`${YTURL}${queryText}&key=${API_KEY}`)
         .then(res => res.json())
         .then(resultsObject => {
-            resultsDiv.style.display = 'inline-block'
+            resultsDiv.style.display = 'block'
             resultsObject.items.forEach(resultObject => {
                 console.log(resultObject)
                 let videoId = resultObject.id.videoId

@@ -1,5 +1,6 @@
 * {
-  max-width: 100%;
+  max-width: 957px;
+  margin: auto;
   font-family: 'Poppins', sans-serif;
 }
 
@@ -10,6 +11,13 @@
   color: rgb(56, 54, 54);
   justify-content: center;
   margin-top: 2em;
+
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 25%,rgba(255,153,153,0) 45%,rgb(255, 255, 255) 100%), url("https://d2qp0siotla746.cloudfront.net/img/features/icons/speech-think.jpg");
+  background-repeat: none;
+  background-position: center;
+  background-size: cover;
+  max-width: 100%;
+  height: 5rem;
 }
 
 h1, #search-container {
@@ -40,13 +48,20 @@ div#review-div {
 
 ul#results-ul {
   display: flex;
+  max-width: 800px;
+  /* margin: auto; */
+  flex-direction: row;
+  justify-content: space-between;
   list-style: none;
+  /* margin-left: 3em;
+  margin-right: 3em; */
+  padding: 3em;
 }
 
 #posts-div { 
   /* background-color: rgb(15, 15, 15); */
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
 }
 
 /* section, li {
@@ -59,7 +74,7 @@ ul#results-ul {
   border: 2px solid rgb(59, 59, 59);
   border-radius: 15px;
   margin-bottom: 2em;
-  margin-top: 2em;
+  /* margin-top: 2em; */
   /* background-color: rgb(228, 225, 225); */
   display: flex;
   /* flex-direction: row; */
@@ -70,6 +85,7 @@ ul#results-ul {
 div.likes-div {
   font-family: 'Roboto', sans-serif;
   justify-content: flex-end;
+  align-items: center;
   margin-right: 0em;
   display: flex;
   /* text-align: center; */
@@ -95,17 +111,29 @@ div.likes-div p {
 div#posts-div div {
   flex: 1;
   padding: .5em;
-  margin-left: 2em;
-  margin-right: 2em;
+  /* margin: auto; */
+  margin-bottom: 3em;
+  
   /* justify-content: space-between */
 }
 
-img {
+/* div#posts-div div{
+  margin-left: -5em;
+} */
+input {
+  font-size: 20px;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-weight: 300;
+  padding: 10px;
+  }
+
+div#posts-div div a img {
   margin-top: 2em;
-  margin-right: 15em;
+  /* margin-right: 15em; */
   border-radius: 15px;
   margin-bottom: 3em;
   margin-left: 2em;
+  margin-right: 5em;
 
   transition: transform .2s; /* Animation */
   
@@ -116,7 +144,7 @@ img {
   border-radius:190px;
 }
 
-img:hover {
+div#posts-div div a img:hover {
   transform: scale(1.1);
 }
 
