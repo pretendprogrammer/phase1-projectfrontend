@@ -9,14 +9,14 @@ const reviewToEnterDiv = document.querySelector("#review-div")
 const titleOfVideoToReview = document.querySelector("#videoToReviewTitle")
 const imageOfVideoToReview = document.querySelector("#videoToReviewImage")
 
-const URL = "http://localhost:3000/videos"
+const databaseURL = "http://localhost:3000/videos"
 const YTURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q="
 const linkToYTVideo = 'https://www.youtube.com/watch?v='
 
 let localDatabase = {}
 const API_KEY = config.MY_SECRET_API_KEY
 
-fetch(URL)
+fetch(databaseURL)
     .then(res => res.json())
     .then(videosArray => {
         videosArray.forEach(videoObject => {
@@ -55,7 +55,7 @@ function processSearch(queryText) {
                 let newResultButton = document.createElement('button')
                     newResultButton.innerText = 'Select'
                     newResultButton.addEventListener('click', function(){
-                        populateReviewForm(thumbnailUrl,title)
+                        populateReviewForm(thumbnailUrl,title,videoId,channelTitle)
                     })
                 newResultLi.append(newResultLink,newResultTitle,newResultButton)
 
@@ -64,26 +64,50 @@ function processSearch(queryText) {
         })
 }
 
-function populateReviewForm(thumbnailString, titleString) {
+function populateReviewForm(thumbnailString, titleString,videoIdString,channelIdString) {
     resultsDiv.style.display = 'None'
     reviewToEnterDiv.style.display = 'inline-block'
     titleOfVideoToReview.innerText = titleString
     imageOfVideoToReview.src = thumbnailString
+    reviewForm.addEventListener('submit', function(event){
+        event.preventDefault()
+        let newVideoPOJO = {
+            "title": titleString,
+            "channel": channelIdString,
+            "videoId": linkToYTVideo+videoIdString,
+            "image": thumbnailString,
+            "likes": 0,
+            "reviews": [event.target["review-input"].value]
+            }
+        console.log(newVideoPOJO)
+        postVideoPOJO(newVideoPOJO)
+    })
+}
+
+function postVideoPOJO(videoObject) {
+    let postConfig = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(videoObject)
+    }
+    fetch(databaseURL, postConfig)
+        .then(res => res.json())
+        .then(postedObject => console.log(postedObject))
 }
 
 function videoObjectToHTML(videoPOJO) {
-    let newVideoDiv = document.createElement("div")
-
     let newThumbnail = document.createElement("img")
         newThumbnail.src = videoPOJO.image
     let newVideoLink = document.createElement("a")
         newVideoLink.href = linkToYTVideo+videoPOJO.videoId
         newVideoLink.target = "_blank"
         newVideoLink.append(newThumbnail)
-
+    
     let newLikesDiv = document.createElement("div")
         newLikesDiv.className = "likes-div"
-
+    
     let likeBtn = document.createElement('button')
         likeBtn.innerText = "Like"
         likeBtn.value = 'false'
@@ -95,19 +119,20 @@ function videoObjectToHTML(videoPOJO) {
     let counter = document.createElement("p")
         counter.innerText = videoPOJO.likes
         counter.id = 'counter'
-
+    
     newLikesDiv.append(likeBtn, counter, dislikeBtn)
-
+    
     let videoInfo = document.createElement('div')
-
+    
     let videoTitle = document.createElement('h3')
-        videoTitle.innerText = videoPOJO.title
+    videoTitle.innerText = videoPOJO.title
     let videoReview = document.createElement('p')
-        videoReview.innerText = videoPOJO.reviews[0]
-
+    videoReview.innerText = videoPOJO.reviews[0]
+    
     videoInfo.append(videoTitle, videoReview)
     
-    newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv)
+    let newVideoDiv = document.createElement("div")
+        newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv)
 
     postedReviewsDiv.append(newVideoDiv)
 }
