@@ -179,6 +179,9 @@ p.review-p {
   padding: 1em;
 }
 
+div#expanded-view-div {
+  display: none;
+}
 
 
 
