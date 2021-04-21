@@ -8,6 +8,7 @@ const resultsDiv = document.querySelector("#results-container")
 const reviewToEnterDiv = document.querySelector("#review-div")
 const titleOfVideoToReview = document.querySelector("#videoToReviewTitle")
 const imageOfVideoToReview = document.querySelector("#videoToReviewImage")
+const YTiframe = document.querySelector("iframe")
 
 const databaseURL = "http://localhost:3000/videos"
 const YTURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=video&q="
@@ -154,6 +155,9 @@ function turnVideoObjectToHTML(videoPOJO) {
     let videoReview = document.createElement('p')
         videoReview.innerText = videoPOJO.reviews[0]
         videoReview.className = "review-p"
+        videoReview.addEventListener('click', function(){
+            openExpandedView(videoPOJO.reviews, videoPOJO.videoId)
+        })
 
     let videoUpdateButton = document.createElement('button')
         videoUpdateButton.innerText = "Update"
@@ -178,6 +182,11 @@ function turnVideoObjectToHTML(videoPOJO) {
         newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv)
 
     postedReviewsDiv.append(newVideoDiv)
+}
+
+function openExpandedView(reviewsArray, videoIdString) {
+    console.log('opening expanded view')
+    YTiframe.src = `https://www.youtube.com/embed/${videoIdString}`
 }
 
 function deleteReview(videoIdNum, videoReviewP) {
