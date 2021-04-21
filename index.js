@@ -10,6 +10,8 @@ const titleOfVideoToReview = document.querySelector("#videoToReviewTitle")
 const imageOfVideoToReview = document.querySelector("#videoToReviewImage")
 const YTiframe = document.querySelector("iframe")
 const expandedViewDiv = document.querySelector("#expanded-view-div")
+const addReviewButton = document.querySelector("#add-review-btn")
+const closeExpandedViewButton = document.querySelector("#close-expanded-view-btn")
 
 const databaseURL = "http://localhost:3000/videos"
 const YTURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=video&q="
@@ -67,16 +69,15 @@ function processSearch(queryText) {
         })
 }
 
-function populateReviewForm(thumbnailString, titleString, videoIdString, channelIdString, update, videoId, reviewElement) {
+function populateReviewForm(thumbnailString, titleString, videoIdString, channelIdString, method, videoIdNum, reviewElement) {
     resultsDiv.style.display = 'None'
     reviewToEnterDiv.style.display = 'inline-block'
     titleOfVideoToReview.innerText = titleString
     imageOfVideoToReview.src = thumbnailString
-    update ? reviewForm['review-input'].value = reviewElement.innerText : reviewForm['review-input'].value = ''
+    method === 'update' ? reviewForm['review-input'].value = reviewElement.innerText : reviewForm['review-input'].value = ''
     reviewForm.addEventListener('submit', function(event){
         event.preventDefault()
-        if (update) {
-            console.log(`${databaseURL}/${videoId}`)
+        if (method === 'update') {
             let patchConfig = {
                 method: "PATCH",
                 headers: {
@@ -84,13 +85,29 @@ function populateReviewForm(thumbnailString, titleString, videoIdString, channel
                 },
                 body: JSON.stringify({"reviews": [event.target["review-input"].value]})
             }
-            fetch(`${databaseURL}/${videoId}`, patchConfig)
+            fetch(`${databaseURL}/${videoIdNum}`, patchConfig)
                 .then(res => res.json())
                 .then(updatedObject => {
-                    localDatabase[videoId].reviews = updatedObject.reviews
+                    localDatabase[videoIdNum].reviews = updatedObject.reviews
                     reviewElement.innerText = updatedObject.reviews[0]
                     reviewForm.reset()
                     reviewToEnterDiv.style.display = 'none'
+                })
+        } else if (method === 'add') {
+            let patchConfig = {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({"reviews": [...localDatabase[videoIdNum].reviews, event.target["review-input"].value]})
+            }
+            fetch(`${databaseURL}/${videoIdNum}`, patchConfig)
+                .then(res => res.json())
+                .then(updatedObject => {
+                    localDatabase[videoIdNum].reviews = updatedObject.reviews
+                    reviewForm.reset()
+                    reviewToEnterDiv.style.display = 'none'
+                    addReviewToExpandedView(localDatabase[videoIdNum].reviews[localDatabase[videoIdNum].reviews.length -1])
                 })
         } else {
             let newVideoPOJO = {
@@ -157,14 +174,14 @@ function turnVideoObjectToHTML(videoPOJO) {
         videoReview.innerText = videoPOJO.reviews[0]
         videoReview.className = "review-p"
         videoReview.addEventListener('click', function(){
-            openExpandedView(videoPOJO.reviews, videoPOJO.videoId)
+            openExpandedView(videoPOJO)
         })
 
     let videoUpdateButton = document.createElement('button')
         videoUpdateButton.innerText = "Update"
         videoUpdateButton.className = "review-mod-btn"  
         videoUpdateButton.addEventListener('click', function(){
-            populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, true, videoPOJO.id, videoReview)
+            populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, 'update', videoPOJO.id, videoReview)
         })
 
     let videoDeleteButton = document.createElement('button')
@@ -185,14 +202,27 @@ function turnVideoObjectToHTML(videoPOJO) {
     postedReviewsDiv.append(newVideoDiv)
 }
 
-function openExpandedView(reviewsArray, videoIdString) {
-    console.log('opening expanded view')
+function addReviewToExpandedView(reviewString) {
+    let reviewLi = document.createElement("li")
+        reviewLi.innerText = reviewString
+    expandedViewDiv.querySelector("ul").append(reviewLi)
+}
+
+function openExpandedView(videoPOJO) {
     expandedViewDiv.style.display = "inline-block"
-    YTiframe.src = `https://www.youtube.com/embed/${videoIdString}`
-    reviewsArray.forEach(reviewString => {
-        let reviewLi = document.createElement("li")
-            reviewLi.innerText = reviewString
-        expandedViewDiv.querySelector("ul").append(reviewLi)
+    YTiframe.src = `https://www.youtube.com/embed/${videoPOJO.videoId}`
+    videoPOJO.reviews.forEach(reviewString => {
+        addReviewToExpandedView(reviewString)
+    })
+    addReviewButton.addEventListener('click', () => {
+        populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, 'add', videoPOJO.id)
+    })
+    closeExpandedViewButton.addEventListener('click', () => {
+        reviewForm.reset()
+        reviewForm.style.display = 'none'
+        YTiframe.src = ''
+        expandedViewDiv.querySelector("ul").innerText = ''
+        expandedViewDiv.style.display = 'none'
     })
 }
 
