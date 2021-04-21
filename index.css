@@ -1,28 +1,36 @@
-body {
-  max-width: 957px;
-  margin: auto;
-  font-family: 'Poppins', sans-serif;
-}
-
 #header-div {
   display: flex;
   text-shadow: 2px 2px #ff0000;
   font-size: 54px;
   color : white;
-  justify-content: center;
+  justify-content: space-evenly;
+  align-items: center;
+  max-width: none;
 
   background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 25%,rgba(255,153,153,0) 45%,rgb(255, 255, 255) 100%), url("https://www.possessionrecords.com/wp-content/uploads/2016/08/possession-records-tv-static_Light.jpg");
   background-repeat: none;
   background-position: center;
   background-size: cover;
-  height: 5rem;
+  height: 15rem;
 }
-
 h1, #search-container {
   text-align: center;
-  margin: 5em;
+  margin: auto;
+  margin-top: 5em;
+  margin-bottom: 5em;
   font-weight: bold ;
 }
+
+body {
+  margin: auto;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+section {
+  max-width: 957px;
+}
+
 
 h3 {
   font-size: 25px;
@@ -37,9 +45,35 @@ div#results-container h3 {
 }
 
 #results-container {
-  border: 1em, solid black;
   display: none;
+} 
+  #results-container img  {
+      border-radius: 30%;
+      height: 7em;
+      width: 10em;
+
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+      transform: scale(1);
+      animation: pulse 2s infinite;
+  }      
+
+  @keyframes pulse {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+    }
+
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
 }
+
 
 div#review-div {
   display: none;
@@ -110,10 +144,6 @@ div.likes-div p {
 div#posts-div div {
   flex: 1;
   padding: .5em;
-  /* margin: auto; */
-  margin-bottom: 3em;
-  
-  /* justify-content: space-between */
 }
 
 div#posts-div div div div{
@@ -126,6 +156,13 @@ input {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
   font-weight: 300;
   padding: 8px;
+  }
+
+  #posts-container {
+    display : flex;
+    flex-wrap: wrap;
+    align-content: center;
+    margin: auto;
   }
 
 div#posts-div div a img {
