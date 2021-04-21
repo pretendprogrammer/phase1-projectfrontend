@@ -9,6 +9,7 @@ const reviewToEnterDiv = document.querySelector("#review-div")
 const titleOfVideoToReview = document.querySelector("#videoToReviewTitle")
 const imageOfVideoToReview = document.querySelector("#videoToReviewImage")
 const YTiframe = document.querySelector("iframe")
+const expandedViewDiv = document.querySelector("#expanded-view-div")
 
 const databaseURL = "http://localhost:3000/videos"
 const YTURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=video&q="
@@ -95,7 +96,7 @@ function populateReviewForm(thumbnailString, titleString, videoIdString, channel
             let newVideoPOJO = {
                 "title": titleString,
                 "channel": channelIdString,
-                "videoId": linkToYTVideo+videoIdString,
+                "videoId": videoIdString,
                 "image": thumbnailString,
                 "likes": 0,
                 "reviews": [event.target["review-input"].value]
@@ -186,7 +187,13 @@ function turnVideoObjectToHTML(videoPOJO) {
 
 function openExpandedView(reviewsArray, videoIdString) {
     console.log('opening expanded view')
+    expandedViewDiv.style.display = "inline-block"
     YTiframe.src = `https://www.youtube.com/embed/${videoIdString}`
+    reviewsArray.forEach(reviewString => {
+        let reviewLi = document.createElement("li")
+            reviewLi.innerText = reviewString
+        expandedViewDiv.querySelector("ul").append(reviewLi)
+    })
 }
 
 function deleteReview(videoIdNum, videoReviewP) {
