@@ -10,7 +10,7 @@ const titleOfVideoToReview = document.querySelector("#videoToReviewTitle")
 const imageOfVideoToReview = document.querySelector("#videoToReviewImage")
 
 const databaseURL = "http://localhost:3000/videos"
-const YTURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q="
+const YTURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=video&q="
 const linkToYTVideo = 'https://www.youtube.com/watch?v='
 
 let localDatabase = {}
@@ -37,7 +37,6 @@ function processSearch(queryText) {
         .then(resultsObject => {
             resultsDiv.style.display = 'inline-block'
             resultsObject.items.forEach(resultObject => {
-                console.log(resultObject)
                 let videoId = resultObject.id.videoId
                 let {channelTitle, title} = resultObject.snippet
                 let thumbnailUrl = resultObject.snippet.thumbnails.default.url
@@ -55,6 +54,7 @@ function processSearch(queryText) {
                 let newResultButton = document.createElement('button')
                     newResultButton.innerText = 'Select'
                     newResultButton.addEventListener('click', function(){
+                        searchForm.reset()
                         populateReviewForm(thumbnailUrl,title,videoId,channelTitle)
                     })
                 newResultLi.append(newResultLink,newResultTitle,newResultButton)
@@ -79,7 +79,6 @@ function populateReviewForm(thumbnailString, titleString,videoIdString,channelId
             "likes": 0,
             "reviews": [event.target["review-input"].value]
             }
-        console.log(newVideoPOJO)
         postVideoPOJO(newVideoPOJO)
     })
 }
@@ -94,7 +93,11 @@ function postVideoPOJO(videoObject) {
     }
     fetch(databaseURL, postConfig)
         .then(res => res.json())
-        .then(postedObject => console.log(postedObject))
+        .then(postedObject => {
+            localDatabase[postedObject.id] = postedObject
+            videoObjectToHTML(postedObject)
+            reviewToEnterDiv.style.display = 'none'
+        })
 }
 
 function videoObjectToHTML(videoPOJO) {
