@@ -21,7 +21,7 @@ fetch(databaseURL)
     .then(videosArray => {
         videosArray.forEach(videoObject => {
             localDatabase[videoObject.id] = videoObject
-            videoObjectToHTML(videoObject)
+            turnVideoObjectToHTML(videoObject)
         })
     })
 
@@ -121,7 +121,7 @@ function postVideoPOJO(videoObject) {
         })
 }
 
-function videoObjectToHTML(videoPOJO) {
+function turnVideoObjectToHTML(videoPOJO) {
     let newThumbnail = document.createElement("img")
         newThumbnail.src = videoPOJO.image
     let newVideoLink = document.createElement("a")
@@ -217,7 +217,7 @@ function changeLikeCount(event, objectId, method) {
         },
         body: JSON.stringify({"likes": newCounterValue})
     }
-    fetch(`${URL}/${objectId}`, patchConfig)
+    fetch(`${databaseURL}/${objectId}`, patchConfig)
         .then(res => res.json())
         .then(updatedObject => {
             localDatabase[updatedObject.id].likes = updatedObject.likes
