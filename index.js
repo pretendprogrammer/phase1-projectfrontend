@@ -251,13 +251,15 @@ function openExpandedView(videoPOJO) {
     })
 }
 
- // DELETE A VIDEO
+ // DELETE A REVIEW
 function deleteVideoObject(videoIdNum) {
-
+  console.log(`${databaseURL}/${videoIdNum}`)
   let deleteConfig = {
     method: "DELETE"
 }
-  fetch(`${databaseURL}/${videoIdNum}`, deleteConfig)
+  fetch(`${databaseURL}/${videoIdNum}`, {
+    method: "DELETE"
+  })
       .then(res => res.json())
       .then(updatedObject => {console.log(updatedObject)})
 }
@@ -279,7 +281,7 @@ function deleteVideoObject(videoIdNum) {
         .then(res => res.json())
         .then(updatedObject => {
             localDatabase[objectIdNum].reviews = updatedObject.reviews
-            
+
         })
   }
 
