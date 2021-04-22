@@ -235,7 +235,7 @@ function openExpandedView(videoPOJO) {
     addReviewButton.addEventListener('click', () => { // LISTENER TO ADD A NEW REVIEW
         populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, 'add', videoPOJO.id)
     })
-    closeExpandedViewButton.addEventListener('click', () => { // LISTNER TO CLOSE EXPANDED VIEW
+    closeExpandedViewButton.addEventListener('click', () => { // LISTENER TO CLOSE EXPANDED VIEW
         reviewForm.reset()
         reviewForm.style.display = 'none'
         YTiframe.src = ''
@@ -251,14 +251,9 @@ function deleteVideoObject(videoIdNum, videoReviewP) {
   let deleteConfig = {
     method: "DELETE"
 }
-    console.log(`${databaseURL}/${videoIdNum}`)
   fetch(`${databaseURL}/${videoIdNum}`, deleteConfig)
       .then(res => res.json())
-      .then(updatedObject => {
-        console.log(updatedObject)
-        videoReviewP.innerText = " "
-        localDatabase[videoIdNum].reviews = ['']
-      })
+      .then(updatedObject => {console.log(updatedObject)})
 }
 
  // TOGGLE LIKE/DISLIKE BUTTONS, UPDATE BACKEND AND MEMORY
