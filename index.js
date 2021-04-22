@@ -167,11 +167,14 @@ function turnVideoObjectToHTML(videoPOJO) {
         dislikeBtn.innerText = "Dislike"
         dislikeBtn.value = 'false'
         dislikeBtn.addEventListener('click', function(event) {changeLikeCount(event, videoPOJO.id, 'subtract')})
+    let likeOrDislikeBtnDiv = document.createElement('div')
+        likeOrDislikeBtnDiv.id = "like-or-dislike-btn-div"
+        likeOrDislikeBtnDiv.append(likeBtn, dislikeBtn)    
     let counter = document.createElement("p")
         counter.innerText = videoPOJO.likes
         counter.id = 'counter'
     
-    newLikesDiv.append(likeBtn, counter, dislikeBtn)
+    newLikesDiv.append(counter, likeOrDislikeBtnDiv)
     
     let videoInfo = document.createElement('div')
     
@@ -253,8 +256,8 @@ function deleteVideoObject(videoIdNum, videoReviewP) {
       .then(res => res.json())
       .then(updatedObject => {
         console.log(updatedObject)
-        // videoReviewP.innerText = " "
-        // localDatabase[videoIdNum].reviews = ['']
+        videoReviewP.innerText = " "
+        localDatabase[videoIdNum].reviews = ['']
       })
 }
 
