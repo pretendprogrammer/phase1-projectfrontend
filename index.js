@@ -202,7 +202,7 @@ function turnVideoObjectToHTML(videoPOJO) {
         videoDeleteButton.className = "review-mod-btn"  
         videoDeleteButton.addEventListener('click', function(e){
             e.preventDefault();
-            deleteVideoObject(videoPOJO.id, videoReview)
+            deleteVideoObject(videoPOJO.id)
         })
     
     let updateDiv = document.createElement('div')
@@ -216,9 +216,15 @@ function turnVideoObjectToHTML(videoPOJO) {
 }
 
 // ADD NEW REVIEW TO VIDEO IN EXPANDED VIEW
-function addReviewToExpandedView(reviewString) {
+function addReviewToExpandedView(reviewString, reviewIndexNum, objectIdNum) {
+    let deleteReviewButton = document.createElement('button')
+        deleteReviewButton.innerText = 'Delete'
+        deleteReviewButton.dataset.id = reviewIndexNum
+        deleteReviewButton.addEventListener('click', () => {
+            deleteVideoReview(objectIdNum, reviewIndexNum)
+        })
     let reviewLi = document.createElement("li")
-        reviewLi.innerText = reviewString
+        reviewLi.append(`${reviewString} `, deleteReviewButton)
     expandedViewDiv.querySelector("ul").append(reviewLi)
 }
 
@@ -229,8 +235,8 @@ function openExpandedView(videoPOJO) {
 
     expandedViewDiv.style.display = "flex"
     YTiframe.src = `https://www.youtube.com/embed/${videoPOJO.videoId}`
-    videoPOJO.reviews.forEach(reviewString => {
-        addReviewToExpandedView(reviewString)
+    videoPOJO.reviews.forEach((reviewString, indexNum) => {
+        addReviewToExpandedView(reviewString, indexNum, videoPOJO.id)
     })
     addReviewButton.addEventListener('click', () => { // LISTENER TO ADD A NEW REVIEW
         populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, 'add', videoPOJO.id)
@@ -245,8 +251,8 @@ function openExpandedView(videoPOJO) {
     })
 }
 
- // DELETE A REVIEW
-function deleteVideoObject(videoIdNum, videoReviewP) {
+ // DELETE A VIDEO
+function deleteVideoObject(videoIdNum) {
 
   let deleteConfig = {
     method: "DELETE"
@@ -255,6 +261,27 @@ function deleteVideoObject(videoIdNum, videoReviewP) {
       .then(res => res.json())
       .then(updatedObject => {console.log(updatedObject)})
 }
+
+ // DELETE A REVIEW
+ function deleteVideoReview(objectIdNum, reviewIndexNum) {
+    let oldReviewArray = localDatabase[objectIdNum].reviews
+    let newArray = [...oldReviewArray].splice(reviewIndexNum, 1)
+    console.log(reviewIndexNum)
+    console.log(newArray)
+    let patchConfig = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({reviews: newArray}),
+    }
+    fetch(`${databaseURL}/${objectIdNum}`, patchConfig)
+        .then(res => res.json())
+        .then(updatedObject => {
+            localDatabase[objectIdNum].reviews = updatedObject.reviews
+            
+        })
+  }
 
  // TOGGLE LIKE/DISLIKE BUTTONS, UPDATE BACKEND AND MEMORY
 function changeLikeCount(event, objectId, method) {
