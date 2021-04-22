@@ -36,7 +36,6 @@ section {
 
 
 h3 {
-  font-size: 25px;
   color: #ff0000;
   text-shadow: 1px 1px black;
   text-align: center;
@@ -44,15 +43,16 @@ h3 {
 }
 
 form#search-form input {
-margin-top: 1em;
-padding: 7px;  
-margin-right: .5em;
-border-style: groove;
+  margin-top: 1em;
+  padding: 7px;  
+  margin-right: .5em;
+  border-style: groove;
 }
 
 form#search-form button:hover {
   color:#ff0000;
-  background-color: #eee7e7
+  background-color: #eee7e7;
+  border-style: inset;
 }
 
 form#search-form button:active {
@@ -135,11 +135,22 @@ ul#results-ul>li>button{
 }
 
 div.likes-div {
+  display: flex;
+  flex-direction: column;
+}
+
+div.likes-div {
   font-family: 'Roboto', sans-serif;
   justify-content: flex-end;
   align-items: center;
   margin-right: 0em;
   display: flex;
+  flex-direction: column;
+}
+
+#like-or-dislike-btn-div button{
+  padding: 1em;
+  margin: 1em;
 }
 
 div.likes-div p {
@@ -218,7 +229,7 @@ button {
   box-shadow: 0 2px #999;
 }
 
-button:hover {background-color: #ca1111c4}
+button:hover {background-color: rgb(252, 62, 62)}
 
 button:active {
   background-color: #c71212;
@@ -314,6 +325,8 @@ img#videoToReviewImage {
   @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
   @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
   @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+
 
 
 
