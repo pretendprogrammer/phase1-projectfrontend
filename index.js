@@ -164,7 +164,9 @@ function turnVideoObjectToHTML(videoPOJO) {
     let likeBtn = document.createElement('button')
         likeBtn.innerText = "Like"
         likeBtn.value = 'false'
-        likeBtn.addEventListener('click', function(event) {changeLikeCount(event, videoPOJO.id, 'add')})
+        likeBtn.addEventListener('click', function(event) {
+          changeLikeCount(event, videoPOJO.id, 'add')
+        })
     let dislikeBtn = document.createElement('button')
         dislikeBtn.innerText = "Dislike"
         dislikeBtn.value = 'false'
