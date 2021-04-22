@@ -23,16 +23,18 @@ const API_KEY = config.MY_SECRET_API_KEY
 let isExpandedViewOpen
 
 // INITIAL FETCH TO POPULATE FROM EXISTING DATABASE
-fetch(databaseURL)
-    .then(res => res.json())
-    .then(videosArray => {
-        videosArray.forEach(videoObject => {
-            localDatabase[videoObject.id] = videoObject
-            turnVideoObjectToHTML(videoObject) // CALL FUNCTION TO ADD TO DOM
+function initialFetch() {
+    fetch(databaseURL)
+        .then(res => res.json())
+        .then(videosArray => {
+            videosArray.forEach(videoObject => {
+                localDatabase[videoObject.id] = videoObject
+                turnVideoObjectToHTML(videoObject) // CALL FUNCTION TO ADD TO DOM
+            })
         })
-    })
+}
 
-// ADD LISTNER TO SUBMIT BUTTON
+// ADD LISTNER TO SUBMIT BUTTON TO SEARCH FOR A VIDEO
 searchForm.addEventListener('submit', function(event){
     event.preventDefault()
     let queryText = event.target['search-query'].value
@@ -113,7 +115,7 @@ function populateReviewForm(thumbnailString, titleString, videoIdString, channel
                     localDatabase[videoIdNum].reviews = updatedObject.reviews
                     reviewForm.reset()
                     reviewToEnterDiv.style.display = 'none'
-                    addReviewToExpandedView(localDatabase[videoIdNum].reviews[localDatabase[videoIdNum].reviews.length -1])
+                    addReviewToExpandedView(localDatabase[videoIdNum].reviews[localDatabase[videoIdNum].reviews.length -1],null,videoIdNum)
                 })
         } else { // MAKE FIRST REVIEW
             let newVideoPOJO = {
@@ -189,7 +191,7 @@ function turnVideoObjectToHTML(videoPOJO) {
         videoReview.innerText = videoPOJO.reviews[0]
         videoReview.className = "review-p"
         videoReview.addEventListener('click', function(){
-            openExpandedView(videoPOJO)
+            openExpandedView(videoPOJO, newVideoDiv)
         })
 
     let videoDeleteButton = document.createElement('button')
@@ -210,28 +212,33 @@ function turnVideoObjectToHTML(videoPOJO) {
 }
 
 // ADD NEW REVIEW TO VIDEO IN EXPANDED VIEW
-function addReviewToExpandedView(reviewString, reviewIndexNum, objectIdNum) {
+function addReviewToExpandedView(reviewString, reviewIndexNum, objectIdNum, videoDiv) {
+    let reviewLi = document.createElement("li") // CREATE MASTER REVIEW <LI>
+
     let deleteReviewButton = document.createElement('button')
         deleteReviewButton.innerText = 'Delete'
         deleteReviewButton.dataset.id = reviewIndexNum
         deleteReviewButton.classname = 'review-delete-btn'
         deleteReviewButton.addEventListener('click', () => {
-            deleteVideoReview(objectIdNum, reviewIndexNum)
+            deleteVideoReview(objectIdNum, reviewIndexNum, reviewLi, videoDiv)
         })
-    let reviewLi = document.createElement("li")
-        reviewLi.append(`${reviewString} `, deleteReviewButton)
+
+    reviewLi.append(`${reviewString} `, deleteReviewButton) // ADD ELEMENTS TO MASTER REVIEW <LI>
+
     expandedViewDiv.querySelector("ul").append(reviewLi)
+    newArray = [...localDatabase[objectIdNum].reviews]
+    newArray.push(reviewString)
 }
 
 // BRING A VIDEO TO EXPANDED VIEW
-function openExpandedView(videoPOJO) {
+function openExpandedView(videoPOJO, videoDiv) {
     if (isExpandedViewOpen) {return}
     isExpandedViewOpen = true
 
     expandedViewDiv.style.display = "flex"
     YTiframe.src = `https://www.youtube.com/embed/${videoPOJO.videoID}`
     videoPOJO.reviews.forEach((reviewString, indexNum) => {
-        addReviewToExpandedView(reviewString, indexNum, videoPOJO.id)
+        addReviewToExpandedView(reviewString, indexNum, videoPOJO.id, videoDiv)
     })
     addReviewButton.addEventListener('click', () => { // LISTENER TO ADD A NEW REVIEW
         populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoID, videoPOJO.channel, 'add', videoPOJO.id)
@@ -248,7 +255,6 @@ function openExpandedView(videoPOJO) {
 
  // DELETE A VIDEO OBJECT
 function deleteVideoObject(videoIdNum, divToDelete) {
-  console.log(`${databaseURL}/${videoIdNum}`)
   let deleteConfig = {
     method: "DELETE"
 }
@@ -261,11 +267,9 @@ function deleteVideoObject(videoIdNum, divToDelete) {
 }
 
  // DELETE A REVIEW
- function deleteVideoReview(objectIdNum, reviewIndexNum) {
+ function deleteVideoReview(objectIdNum, reviewIndexNum, reviewLiElement, videoDivElement) {
     let newArray = [...localDatabase[objectIdNum].reviews]
     newArray.splice(reviewIndexNum, 1)
-    console.log(reviewIndexNum)
-    console.log(newArray)
     let patchConfig = {
       method: "PATCH",
       headers: {
@@ -276,7 +280,15 @@ function deleteVideoObject(videoIdNum, divToDelete) {
     fetch(`${databaseURL}/${objectIdNum}`, patchConfig)
         .then(res => res.json())
         .then(updatedObject => {
-            localDatabase[objectIdNum].reviews = updatedObject.reviews
+            if (updatedObject.reviews.length === 0) {
+                deleteVideoObject(objectIdNum,videoDivElement)
+                reviewLiElement.remove()
+                videoDivElement.remove()
+                expandedViewDiv.style.display = 'none'
+            } else {
+                localDatabase[objectIdNum].reviews = updatedObject.reviews
+                reviewLiElement.remove()
+            }
         })
   }
 
@@ -312,3 +324,5 @@ function changeLikeCount(event, objectId, method) {
         })
 }
 
+
+initialFetch()
