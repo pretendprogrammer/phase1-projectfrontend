@@ -214,6 +214,7 @@ function addReviewToExpandedView(reviewString, reviewIndexNum, objectIdNum) {
     let deleteReviewButton = document.createElement('button')
         deleteReviewButton.innerText = 'Delete'
         deleteReviewButton.dataset.id = reviewIndexNum
+        deleteReviewButton.classname = 'review-delete-btn'
         deleteReviewButton.addEventListener('click', () => {
             deleteVideoReview(objectIdNum, reviewIndexNum)
         })
@@ -261,8 +262,8 @@ function deleteVideoObject(videoIdNum, divToDelete) {
 
  // DELETE A REVIEW
  function deleteVideoReview(objectIdNum, reviewIndexNum) {
-    let oldReviewArray = localDatabase[objectIdNum].reviews
-    let newArray = [...oldReviewArray].splice(reviewIndexNum, 1)
+    let newArray = [...localDatabase[objectIdNum].reviews]
+    newArray.splice(reviewIndexNum, 1)
     console.log(reviewIndexNum)
     console.log(newArray)
     let patchConfig = {
@@ -276,7 +277,6 @@ function deleteVideoObject(videoIdNum, divToDelete) {
         .then(res => res.json())
         .then(updatedObject => {
             localDatabase[objectIdNum].reviews = updatedObject.reviews
-
         })
   }
 
