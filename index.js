@@ -14,12 +14,13 @@ const expandedViewDiv = document.querySelector("#expanded-view-div")
 const addReviewButton = document.querySelector("#add-review-btn")
 const closeExpandedViewButton = document.querySelector("#close-expanded-view-btn")
 
-// OTHER CONSTANT VARIABLES
+// OTHER VARIABLES
 const databaseURL = "http://localhost:3000/videos"
 const YTURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=video&q="
 const linkToYTVideo = 'https://www.youtube.com/watch?v='
 let localDatabase = {}
 const API_KEY = config.MY_SECRET_API_KEY
+let isExpandedViewOpen
 
 // INITIAL FETCH TO POPULATE FROM EXISTING DATABASE
 fetch(databaseURL)
@@ -198,7 +199,7 @@ function turnVideoObjectToHTML(videoPOJO) {
         videoDeleteButton.className = "review-mod-btn"  
         videoDeleteButton.addEventListener('click', function(e){
             e.preventDefault();
-            deleteReview(videoPOJO.id, videoReview)
+            deleteVideoObject(videoPOJO.id, videoReview)
         })
     
     let updateAndDeleteDiv = document.createElement('div')
@@ -220,6 +221,9 @@ function addReviewToExpandedView(reviewString) {
 
 // BRING A VIDEO TO EXPANDED VIEW
 function openExpandedView(videoPOJO) {
+    if (isExpandedViewOpen) {return}
+    isExpandedViewOpen = true
+
     expandedViewDiv.style.display = "flex"
     YTiframe.src = `https://www.youtube.com/embed/${videoPOJO.videoId}`
     videoPOJO.reviews.forEach(reviewString => {
@@ -234,26 +238,23 @@ function openExpandedView(videoPOJO) {
         YTiframe.src = ''
         expandedViewDiv.querySelector("ul").innerText = ''
         expandedViewDiv.style.display = 'none'
+        isExpandedViewOpen = false
     })
 }
 
  // DELETE A REVIEW
-function deleteReview(videoIdNum, videoReviewP) {
+function deleteVideoObject(videoIdNum, videoReviewP) {
 
-  let patchConfig = {
-    method: "PATCH",
-    headers: {
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify({"reviews": [''] })
+  let deleteConfig = {
+    method: "DELETE"
 }
-
-  fetch(`${databaseURL}/${videoIdNum}`, patchConfig)
+    console.log(`${databaseURL}/${videoIdNum}`)
+  fetch(`${databaseURL}/${videoIdNum}`, deleteConfig)
       .then(res => res.json())
       .then(updatedObject => {
         console.log(updatedObject)
-        videoReviewP.innerText = " "
-        localDatabase[videoIdNum].reviews = ['']
+        // videoReviewP.innerText = " "
+        // localDatabase[videoIdNum].reviews = ['']
       })
 }
 
