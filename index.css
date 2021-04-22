@@ -1,18 +1,21 @@
 #header-div {
   display: flex;
-  text-shadow: 2px 2px #ff0000;
+  text-shadow: 3px 3px 3px #df0606;
   font-size: 54px;
-  color : white;
+  color : rgb(224, 217, 217);
   justify-content: space-evenly;
   align-items: center;
   max-width: none;
+  flex-wrap: wrap;
 
   background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 25%,rgba(255,153,153,0) 45%,rgb(255, 255, 255) 100%), url("https://www.possessionrecords.com/wp-content/uploads/2016/08/possession-records-tv-static_Light.jpg");
   background-repeat: none;
   background-position: center;
   background-size: cover;
   height: 15rem;
+  filter:contrast(120%);
 }
+
 h1, #search-container {
   text-align: center;
   margin: auto;
@@ -38,6 +41,24 @@ h3 {
   text-shadow: 1px 1px black;
   text-align: center;
   /* text-decoration: underline; */
+}
+
+form#search-form input {
+margin-top: 1em;
+padding: 7px;  
+margin-right: .5em;
+border-style: groove;
+}
+
+form#search-form button:hover {
+  color:#ff0000;
+  background-color: #eee7e7
+}
+
+form#search-form button:active {
+  background-color: #c71212;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
 
 div#results-container h3 {
@@ -101,20 +122,6 @@ ul#results-ul>li>button{
   color: #ff0000;
 }
 
-/* ul#results-ul li button{
-  flex-
-} */
-
-#posts-div { 
-  /* background-color: rgb(15, 15, 15); */
-  /* display: flex;
-  flex-direction: column; */
-}
-
-/* section, li {
-  justify-content: center;
-} */
-
 #posts-div>div {
   color: rgb(56, 54, 54);
   background: rgb(213, 216, 218);
@@ -177,7 +184,7 @@ input {
 div#posts-div div a img {
   margin-top: 2em;
   /* margin-right: 15em; */
-  border-radius: 15px;
+  border-radius: 30%;
   margin-bottom: 3em;
   margin-left: 2em;
   margin-right: 5em;
@@ -188,11 +195,12 @@ div#posts-div div a img {
   height: 190px;
   border:2px transparent;
   box-shadow: 0px 6px 5px #999;
-  border-radius:190px;
+  border-radius: 30%;
 }
 
 div#posts-div div a img:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
+  box-shadow: 0 0 2px 1px rgba(255, 0, 0, 0.795);
 }
 
 button {
@@ -223,11 +231,92 @@ p.review-p {
   border-radius: 5px;
   background-color: #fff;
   padding: 1em;
+  text-align: center;
+}
+
+#expanded-view-container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin: auto;
+  margin-bottom: 5em;
 }
 
 div#expanded-view-div {
   display: none;
+  text-align: center;
+  margin: auto;
+  flex-direction: column;
+  align-content: center;
+  max-width: 957px;
+  justify-content: center;
+  border-radius: 50% 10% / 10% 40%;
+  background-color: rgb(161, 156, 156);
+  color: white;
 }
+
+div#expanded-view-div li {
+  list-style-type: none;
+}
+
+#review-container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin: auto;
+  margin-bottom: 1em;
+}
+
+#review-container label {
+  color: rgb(255, 255, 255);
+}
+
+div#review-div {
+  padding-bottom: 2em;
+  display: none;
+  text-align: center;
+  margin: auto;
+  flex-direction: column;
+  align-content: center;
+  max-width: 957px;
+  justify-content: center;
+  border-radius: 50% 10% / 10% 40%;
+  background-color: rgb(213, 216, 218);
+  color: rgb(247, 0, 0);
+  text-shadow: 1px 1px 1px #4b4a4a;
+  justify-content: center;
+  align-content: center;
+  margin: auto;
+  margin-bottom: 5em;
+}
+
+h2#videoToReviewTitle {
+  letter-spacing: 3px;
+  font-size: 25px;
+}
+
+form#review-form {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+}
+
+img#videoToReviewImage {
+  border-radius: 50%;
+  width: 160px;
+  height: 160px;
+  margin: auto;
+  -webkit-animation:spin 10s linear infinite;
+  -moz-animation:spin 10s linear infinite;
+  animation:spin 10s linear infinite;
+}
+
+  @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+  @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+  @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+
+
 
 
 

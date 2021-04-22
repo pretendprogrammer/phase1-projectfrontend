@@ -71,7 +71,7 @@ function processSearch(queryText) {
 
 function populateReviewForm(thumbnailString, titleString, videoIdString, channelIdString, method, videoIdNum, reviewElement) {
     resultsDiv.style.display = 'None'
-    reviewToEnterDiv.style.display = 'inline-block'
+    reviewToEnterDiv.style.display = 'flex'
     titleOfVideoToReview.innerText = titleString
     imageOfVideoToReview.src = thumbnailString
     method === 'update' ? reviewForm['review-input'].value = reviewElement.innerText : reviewForm['review-input'].value = ''
@@ -167,6 +167,8 @@ function turnVideoObjectToHTML(videoPOJO) {
     
     let videoInfo = document.createElement('div')
     
+
+
     let videoTitle = document.createElement('h3')
         videoTitle.innerText = videoPOJO.title
 
@@ -209,7 +211,7 @@ function addReviewToExpandedView(reviewString) {
 }
 
 function openExpandedView(videoPOJO) {
-    expandedViewDiv.style.display = "inline-block"
+    expandedViewDiv.style.display = "flex"
     YTiframe.src = `https://www.youtube.com/embed/${videoPOJO.videoId}`
     videoPOJO.reviews.forEach(reviewString => {
         addReviewToExpandedView(reviewString)
