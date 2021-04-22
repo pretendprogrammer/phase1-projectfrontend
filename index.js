@@ -1,3 +1,4 @@
+// STABLE ELEMENT DECLARATIONS
 const searchForm = document.querySelector("#search-form")
 const reviewForm = document.querySelector("#review-form")
 const resultsUl = document.querySelector("#results-ul")
@@ -13,28 +14,31 @@ const expandedViewDiv = document.querySelector("#expanded-view-div")
 const addReviewButton = document.querySelector("#add-review-btn")
 const closeExpandedViewButton = document.querySelector("#close-expanded-view-btn")
 
+// OTHER CONSTANT VARIABLES
 const databaseURL = "http://localhost:3000/videos"
 const YTURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=video&q="
 const linkToYTVideo = 'https://www.youtube.com/watch?v='
-
 let localDatabase = {}
 const API_KEY = config.MY_SECRET_API_KEY
 
+// INITIAL FETCH TO POPULATE FROM EXISTING DATABASE
 fetch(databaseURL)
     .then(res => res.json())
     .then(videosArray => {
         videosArray.forEach(videoObject => {
             localDatabase[videoObject.id] = videoObject
-            turnVideoObjectToHTML(videoObject)
+            turnVideoObjectToHTML(videoObject) // CALL FUNCTION TO ADD TO DOM
         })
     })
 
+// ADD LISTNER TO SUBMIT BUTTON
 searchForm.addEventListener('submit', function(event){
     event.preventDefault()
     let queryText = event.target['search-query'].value
     processSearch(queryText)
 })
 
+// USE YOUTUBE'S API TO SEARCH FOR TOP 5 RESULTS AND DISPLAY THEM TO THE DOM
 function processSearch(queryText) {
     fetch(`${YTURL}${queryText}&key=${API_KEY}`)
         .then(res => res.json())
@@ -69,6 +73,7 @@ function processSearch(queryText) {
         })
 }
 
+// UPON SELECTION, BRING CHOSEN VIDEO INTO FORM ON THE DOM, ADD LISTENERS TO:
 function populateReviewForm(thumbnailString, titleString, videoIdString, channelIdString, method, videoIdNum, reviewElement) {
     resultsDiv.style.display = 'None'
     reviewToEnterDiv.style.display = 'flex'
@@ -77,7 +82,7 @@ function populateReviewForm(thumbnailString, titleString, videoIdString, channel
     method === 'update' ? reviewForm['review-input'].value = reviewElement.innerText : reviewForm['review-input'].value = ''
     reviewForm.addEventListener('submit', function(event){
         event.preventDefault()
-        if (method === 'update') {
+        if (method === 'update') { // MODIFY EXISTING REVIEW
             let patchConfig = {
                 method: "PATCH",
                 headers: {
@@ -93,7 +98,7 @@ function populateReviewForm(thumbnailString, titleString, videoIdString, channel
                     reviewForm.reset()
                     reviewToEnterDiv.style.display = 'none'
                 })
-        } else if (method === 'add') {
+        } else if (method === 'add') { // ADD NEW REVIEW
             let patchConfig = {
                 method: "PATCH",
                 headers: {
@@ -109,7 +114,7 @@ function populateReviewForm(thumbnailString, titleString, videoIdString, channel
                     reviewToEnterDiv.style.display = 'none'
                     addReviewToExpandedView(localDatabase[videoIdNum].reviews[localDatabase[videoIdNum].reviews.length -1])
                 })
-        } else {
+        } else { // MAKE FIRST REVIEW
             let newVideoPOJO = {
                 "title": titleString,
                 "channel": channelIdString,
@@ -123,6 +128,7 @@ function populateReviewForm(thumbnailString, titleString, videoIdString, channel
     })
 }
 
+//FUNCTION TO ADD VIDEO TO BACKEND, MEMORY, AND DOM
 function postVideoPOJO(videoObject) {
     let postConfig = {
         method: "POST",
@@ -140,6 +146,7 @@ function postVideoPOJO(videoObject) {
         })
 }
 
+// CREATE VISUAL ELEMENTS FROM OBJECSTS OF VIDEO INFORMATION
 function turnVideoObjectToHTML(videoPOJO) {
     let newThumbnail = document.createElement("img")
         newThumbnail.src = videoPOJO.image
@@ -204,22 +211,24 @@ function turnVideoObjectToHTML(videoPOJO) {
     postedReviewsDiv.append(newVideoDiv)
 }
 
+// ADD NEW REVIEW TO VIDEO IN EXPANDED VIEW
 function addReviewToExpandedView(reviewString) {
     let reviewLi = document.createElement("li")
         reviewLi.innerText = reviewString
     expandedViewDiv.querySelector("ul").append(reviewLi)
 }
 
+// BRING A VIDEO TO EXPANDED VIEW
 function openExpandedView(videoPOJO) {
     expandedViewDiv.style.display = "flex"
     YTiframe.src = `https://www.youtube.com/embed/${videoPOJO.videoId}`
     videoPOJO.reviews.forEach(reviewString => {
         addReviewToExpandedView(reviewString)
     })
-    addReviewButton.addEventListener('click', () => {
+    addReviewButton.addEventListener('click', () => { // LISTENER TO ADD A NEW REVIEW
         populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, 'add', videoPOJO.id)
     })
-    closeExpandedViewButton.addEventListener('click', () => {
+    closeExpandedViewButton.addEventListener('click', () => { // LISTNER TO CLOSE EXPANDED VIEW
         reviewForm.reset()
         reviewForm.style.display = 'none'
         YTiframe.src = ''
@@ -228,6 +237,7 @@ function openExpandedView(videoPOJO) {
     })
 }
 
+ // DELETE A REVIEW
 function deleteReview(videoIdNum, videoReviewP) {
 
   let patchConfig = {
@@ -247,6 +257,7 @@ function deleteReview(videoIdNum, videoReviewP) {
       })
 }
 
+ // TOGGLE LIKE/DISLIKE BUTTONS, UPDATE BACKEND AND MEMORY
 function changeLikeCount(event, objectId, method) {
     let button = event.path[0]
     button.disabled = 'true'
