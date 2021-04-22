@@ -259,11 +259,11 @@ function openExpandedView(videoPOJO, videoDiv) {
 function deleteVideoObject(videoIdNum, divToDelete) {
   let deleteConfig = {
     method: "DELETE"
-}
+    }
+    console.log(`${databaseURL}/${videoIdNum}`)
   fetch(`${databaseURL}/${videoIdNum}`, deleteConfig)
-      .then(res => res.json())
-      .then(() => {
-        delete localDatabase[videoIdNum]
+      .then((res) => {
+        delete localDatabase[videoIdNum];
         divToDelete.remove()
       })
 }
