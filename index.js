@@ -147,7 +147,7 @@ function postVideoPOJO(videoObject) {
         })
 }
 
-// CREATE VISUAL ELEMENTS FROM OBJECSTS OF VIDEO INFORMATION
+// CREATE VISUAL ELEMENTS FROM OBJECTS OF VIDEO INFORMATION
 function turnVideoObjectToHTML(videoPOJO) {
     let newThumbnail = document.createElement("img")
         newThumbnail.src = videoPOJO.image
@@ -190,12 +190,12 @@ function turnVideoObjectToHTML(videoPOJO) {
             openExpandedView(videoPOJO)
         })
 
-    let videoUpdateButton = document.createElement('button')
-        videoUpdateButton.innerText = "Update"
-        videoUpdateButton.className = "review-mod-btn"  
-        videoUpdateButton.addEventListener('click', function(){
-            populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, 'update', videoPOJO.id, videoReview)
-        })
+    // let videoUpdateButton = document.createElement('button')
+    //     videoUpdateButton.innerText = "Update"
+    //     videoUpdateButton.className = "review-mod-btn"  
+    //     videoUpdateButton.addEventListener('click', function(){
+    //         populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, 'update', videoPOJO.id, videoReview)
+    //     })
 
     let videoDeleteButton = document.createElement('button')
         videoDeleteButton.innerText = "Delete"
@@ -205,9 +205,9 @@ function turnVideoObjectToHTML(videoPOJO) {
             deleteVideoObject(videoPOJO.id, videoReview)
         })
     
-    let updateAndDeleteDiv = document.createElement('div')
-    updateAndDeleteDiv.append(videoUpdateButton, videoDeleteButton)    
-    videoInfo.append(videoTitle, videoReview, updateAndDeleteDiv)
+    let updateDiv = document.createElement('div')
+    updateDiv.append(videoDeleteButton)    
+    videoInfo.append(videoTitle, videoReview, updateDiv)
     
     let newVideoDiv = document.createElement("div")
         newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv)
