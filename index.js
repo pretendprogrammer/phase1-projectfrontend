@@ -47,7 +47,7 @@ function processSearch(queryText) {
             resultsUl.innerText = ''
             resultsDiv.style.display = 'block'
             resultsObject.items.forEach(resultObject => {
-                let videoId = resultObject.id.videoID
+                let videoId = resultObject.id.videoId
                 let {channelTitle, title} = resultObject.snippet
                 let thumbnailUrl = resultObject.snippet.thumbnails.default.url
 
@@ -154,7 +154,7 @@ function turnVideoObjectToHTML(videoPOJO) {
     let newThumbnail = document.createElement("img")
         newThumbnail.src = videoPOJO.image
     let newVideoLink = document.createElement("a")
-        newVideoLink.href = linkToYTVideo+videoPOJO.videoId
+        newVideoLink.href = linkToYTVideo+videoPOJO.videoID
         newVideoLink.target = "_blank"
         newVideoLink.append(newThumbnail)
     
@@ -192,13 +192,6 @@ function turnVideoObjectToHTML(videoPOJO) {
             openExpandedView(videoPOJO)
         })
 
-    // let videoUpdateButton = document.createElement('button')
-    //     videoUpdateButton.innerText = "Update"
-    //     videoUpdateButton.className = "review-mod-btn"  
-    //     videoUpdateButton.addEventListener('click', function(){
-    //         populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, 'update', videoPOJO.id, videoReview)
-    //     })
-
     let videoDeleteButton = document.createElement('button')
         videoDeleteButton.innerText = "Delete"
         videoDeleteButton.className = "review-mod-btn"  
@@ -235,12 +228,12 @@ function openExpandedView(videoPOJO) {
     isExpandedViewOpen = true
 
     expandedViewDiv.style.display = "flex"
-    YTiframe.src = `https://www.youtube.com/embed/${videoPOJO.videoId}`
+    YTiframe.src = `https://www.youtube.com/embed/${videoPOJO.videoID}`
     videoPOJO.reviews.forEach((reviewString, indexNum) => {
         addReviewToExpandedView(reviewString, indexNum, videoPOJO.id)
     })
     addReviewButton.addEventListener('click', () => { // LISTENER TO ADD A NEW REVIEW
-        populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoId, videoPOJO.channel, 'add', videoPOJO.id)
+        populateReviewForm(videoPOJO.image, videoPOJO.title, videoPOJO.videoID, videoPOJO.channel, 'add', videoPOJO.id)
     })
     closeExpandedViewButton.addEventListener('click', () => { // LISTENER TO CLOSE EXPANDED VIEW
         reviewForm.reset()
