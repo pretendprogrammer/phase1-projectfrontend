@@ -19,8 +19,8 @@
 h1, #search-container {
   text-align: center;
   margin: auto;
-  margin-top: 5em;
-  margin-bottom: 5em;
+  margin-top: 2em;
+  margin-bottom: 2em;
   font-weight: bold ;
 }
 
@@ -113,13 +113,17 @@ ul#results-ul>li {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-right: .5em;
+  background-color: rgb(161 156 156 / 34%);
+  color: rgb(32, 32, 32);
+  border-radius: 15px;
+  margin-right: .5em;
+  padding: .5em;
 }
 
 ul#results-ul>li>button{
-  width: 6em;
   align-self: center;
-  background-color: rgb(218, 224, 224);
-  color: #ff0000;
+  color: hsl(0deg 0% 5%);
 }
 
 #posts-div>div {
@@ -146,6 +150,11 @@ div.likes-div {
 #like-or-dislike-btn-div button{
   padding: 1em;
   margin: 1em;
+}
+
+.button-clicked {
+  background-color: white;
+  color:rgb(247, 0, 0)
 }
 
 
