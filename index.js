@@ -47,7 +47,7 @@ function processSearch(queryText) {
             resultsUl.innerText = ''
             resultsDiv.style.display = 'block'
             resultsObject.items.forEach(resultObject => {
-                let videoId = resultObject.id.videoId
+                let videoId = resultObject.id.videoID
                 let {channelTitle, title} = resultObject.snippet
                 let thumbnailUrl = resultObject.snippet.thumbnails.default.url
 
@@ -119,7 +119,7 @@ function populateReviewForm(thumbnailString, titleString, videoIdString, channel
             let newVideoPOJO = {
                 "title": titleString,
                 "channel": channelIdString,
-                "videoId": videoIdString,
+                "videoID": videoIdString,
                 "image": thumbnailString,
                 "likes": 0,
                 "reviews": [event.target["review-input"].value]
@@ -139,16 +139,18 @@ function postVideoPOJO(videoObject) {
         body: JSON.stringify(videoObject)
     }
     fetch(databaseURL, postConfig)
-        .then(res => res.json())
-        .then(postedObject => {
-            localDatabase[postedObject.id] = postedObject
-            turnVideoObjectToHTML(postedObject)
-            reviewToEnterDiv.style.display = 'none'
-        })
+    .then(res => res.json())
+    .then(postedObject => {
+        localDatabase[postedObject.id] = postedObject
+        turnVideoObjectToHTML(postedObject)
+        reviewToEnterDiv.style.display = 'none'
+    })
 }
 
 // CREATE VISUAL ELEMENTS FROM OBJECTS OF VIDEO INFORMATION
 function turnVideoObjectToHTML(videoPOJO) {
+    let newVideoDiv = document.createElement("div") // CREATE MASTER DIV
+
     let newThumbnail = document.createElement("img")
         newThumbnail.src = videoPOJO.image
     let newVideoLink = document.createElement("a")
@@ -202,15 +204,14 @@ function turnVideoObjectToHTML(videoPOJO) {
         videoDeleteButton.className = "review-mod-btn"  
         videoDeleteButton.addEventListener('click', function(e){
             e.preventDefault();
-            deleteVideoObject(videoPOJO.id)
+            deleteVideoObject(videoPOJO.id, newVideoDiv)
         })
     
     let updateDiv = document.createElement('div')
     updateDiv.append(videoDeleteButton)    
     videoInfo.append(videoTitle, videoReview, updateDiv)
     
-    let newVideoDiv = document.createElement("div")
-        newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv)
+    newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv) // ADD SUB-ELEMENTS TO MASTER DIV
 
     postedReviewsDiv.append(newVideoDiv)
 }
@@ -251,17 +252,18 @@ function openExpandedView(videoPOJO) {
     })
 }
 
- // DELETE A REVIEW
-function deleteVideoObject(videoIdNum) {
+ // DELETE A VIDEO OBJECT
+function deleteVideoObject(videoIdNum, divToDelete) {
   console.log(`${databaseURL}/${videoIdNum}`)
   let deleteConfig = {
     method: "DELETE"
 }
-  fetch(`${databaseURL}/${videoIdNum}`, {
-    method: "DELETE"
-  })
+  fetch(`${databaseURL}/${videoIdNum}`, deleteConfig)
       .then(res => res.json())
-      .then(updatedObject => {console.log(updatedObject)})
+      .then(() => {
+        delete localDatabase[videoIdNum]
+        divToDelete.remove()
+      })
 }
 
  // DELETE A REVIEW
