@@ -308,7 +308,7 @@ function changeLikeCount(event, objectId, method) {
         .then(res => res.json())
         .then(updatedObject => {
             localDatabase[updatedObject.id].likes = updatedObject.likes
-            event.path[1].querySelector("#counter").innerText = localDatabase[updatedObject.id].likes
+            event.path[2].querySelector("#counter").innerText = localDatabase[updatedObject.id].likes
             button.disabled = false
         })
         .catch(error => {
