@@ -280,6 +280,20 @@ div#expanded-view-div li {
   list-style-type: none;
 }
 
+div#expanded-view-div button {
+  padding: .6em;
+  border-radius: 10px;
+  margin-left: 1em;
+}
+
+/* button#add-review-btn {
+
+}
+
+button#close-expanded-view-btn{
+
+} */
+
 #review-container {
   display: flex;
   justify-content: center;
@@ -314,6 +328,7 @@ div#review-div {
 h2#videoToReviewTitle {
   letter-spacing: 3px;
   font-size: 25px;
+  max-width: 500px;
 }
 
 form#review-form {
@@ -335,6 +350,8 @@ img#videoToReviewImage {
   @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
   @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
   @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+
 
 
 

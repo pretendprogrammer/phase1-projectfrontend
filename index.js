@@ -162,13 +162,13 @@ function turnVideoObjectToHTML(videoPOJO) {
         newLikesDiv.className = "likes-div"
     
     let likeBtn = document.createElement('button')
-        likeBtn.innerText = "Like"
+        likeBtn.innerHTML = '<i class="fas fa-thumbs-up"></i>'
         likeBtn.value = 'false'
         likeBtn.addEventListener('click', function(event) {
           changeLikeCount(event, videoPOJO.id, 'add')
         })
     let dislikeBtn = document.createElement('button')
-        dislikeBtn.innerText = "Dislike"
+        dislikeBtn.innerHTML = '<i class="fas fa-thumbs-down"></i>'
         dislikeBtn.value = 'false'
         dislikeBtn.addEventListener('click', function(event) {changeLikeCount(event, videoPOJO.id, 'subtract')})
     let likeOrDislikeBtnDiv = document.createElement('div')
@@ -305,7 +305,7 @@ function changeLikeCount(event, objectId, method) {
         .then(res => res.json())
         .then(updatedObject => {
             localDatabase[updatedObject.id].likes = updatedObject.likes
-            event.path[2].querySelector("#counter").innerText = localDatabase[updatedObject.id].likes
+            event.path[3].querySelector("#counter").innerText = localDatabase[updatedObject.id].likes
             button.disabled = false
         })
         .catch(error => {
