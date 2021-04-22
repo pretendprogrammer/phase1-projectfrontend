@@ -136,16 +136,11 @@ ul#results-ul>li>button{
 
 div.likes-div {
   display: flex;
-  flex-direction: column;
-}
-
-div.likes-div {
   font-family: 'Roboto', sans-serif;
-  justify-content: flex-end;
   align-items: center;
   margin-right: 0em;
-  display: flex;
   flex-direction: column;
+  /* border-style: dotted; */
 }
 
 #like-or-dislike-btn-div button{
@@ -155,14 +150,19 @@ div.likes-div {
 
 div.likes-div p {
   display: block;
-  border-radius: 50%;
-  width: 36px;
-  height: 29px;
-  padding: 8px;
-
+  border-radius: 40%;
+  width: 56px;
+  height: 49px;
+  padding-top: 1.5em;
+  padding-right: 1em;
+  padding-left: 1em;
+  padding-bottom: 1.5px;
+  font-size: larger;
   background: #fff;
   border: 2px solid #666;
-  color: #666;
+  border-style: outset;
+  border-width: .4em;
+  color: rgb(255, 0, 0);
   text-align: center;
   margin-left: 2em;
   margin-right: 2em;
