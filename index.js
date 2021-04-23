@@ -178,7 +178,7 @@ function turnVideoObjectToHTML(videoPOJO) {
     
     let clickMeText = document.createElement('p')
     clickMeText.className = "click-txt"
-    clickMeText.innerHTML = '<i class="far fa-hand-point-up"></i> click above to review or edit! <i class="far fa-hand-point-up"></i>' 
+    clickMeText.innerHTML = '<i class="far fa-hand-point-up"></i> click above to add a review! <i class="far fa-hand-point-up"></i>' 
 
     let videoTitle = document.createElement('h3')
         videoTitle.innerText = videoPOJO.title
