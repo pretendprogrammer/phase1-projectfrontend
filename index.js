@@ -159,20 +159,24 @@ function turnVideoObjectToHTML(videoPOJO) {
         newVideoLink.href = linkToYTVideo+videoPOJO.videoID
         newVideoLink.target = "_blank"
         newVideoLink.append(newThumbnail)
-    
+
     let newLikesDiv = document.createElement("div")
         newLikesDiv.className = "likes-div"
     
     let likeBtn = document.createElement('button')
-        likeBtn.innerHTML = '<i class="fas fa-thumbs-up"></i>'
+        likeBtn.innerHTML = '<i class="fas fa-thumbs-up fa-lg"></i>'
         likeBtn.value = 'false'
         likeBtn.addEventListener('click', function(event) {
+          counter.className = "record-playing-animation"
           changeLikeCount(event, videoPOJO.id, 'add')
         })
     let dislikeBtn = document.createElement('button')
-        dislikeBtn.innerHTML = '<i class="fas fa-thumbs-down"></i>'
+        dislikeBtn.innerHTML = '<i class="fas fa-thumbs-down fa-lg"></i>'
         dislikeBtn.value = 'false'
-        dislikeBtn.addEventListener('click', function(event) {changeLikeCount(event, videoPOJO.id, 'subtract')})
+        dislikeBtn.addEventListener('click', function(event) {
+          counter.className = "record-playing-animation"
+          changeLikeCount(event, videoPOJO.id, 'subtract')
+        })
     let likeOrDislikeBtnDiv = document.createElement('div')
         likeOrDislikeBtnDiv.id = "like-or-dislike-btn-div"
         likeOrDislikeBtnDiv.append(likeBtn, dislikeBtn)    
@@ -184,7 +188,9 @@ function turnVideoObjectToHTML(videoPOJO) {
     
     let videoInfo = document.createElement('div')
     
-
+    let clickMeText = document.createElement('p')
+    clickMeText.className = "click-txt"
+    clickMeText.innerHTML = '<i class="far fa-hand-point-up"></i> click above to review or edit! <i class="far fa-hand-point-up"></i>' 
 
     let videoTitle = document.createElement('h3')
         videoTitle.innerText = videoPOJO.title
@@ -206,7 +212,7 @@ function turnVideoObjectToHTML(videoPOJO) {
     
     let updateDiv = document.createElement('div')
     updateDiv.append(videoDeleteButton)    
-    videoInfo.append(videoTitle, videoReview, updateDiv)
+    videoInfo.append(videoTitle, videoReview, clickMeText, updateDiv)
     
     newVideoDiv.append(newVideoLink, videoInfo, newLikesDiv) // ADD SUB-ELEMENTS TO MASTER DIV
 
