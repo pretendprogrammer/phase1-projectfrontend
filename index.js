@@ -254,9 +254,9 @@ function deleteVideoObject(videoIdNum, divToDelete) {
   let deleteConfig = {
     method: "DELETE"
     }
-    console.log(`${databaseURL}/${videoIdNum}`)
+    console.log(`${databaseURL}/${videoIdNum}`, deleteConfig)
   fetch(`${databaseURL}/${videoIdNum}`, deleteConfig)
-      .then((res) => {
+      .then(() => {
         delete localDatabase[videoIdNum];
         divToDelete.remove()
       })
@@ -281,6 +281,7 @@ function deleteVideoObject(videoIdNum, divToDelete) {
                 reviewLiElement.remove()
                 videoDivElement.remove()
                 expandedViewDiv.style.display = 'none'
+                isExpandedViewOpen = false
             } else {
                 localDatabase[objectIdNum].reviews = updatedObject.reviews
                 reviewLiElement.remove()
