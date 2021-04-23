@@ -195,7 +195,7 @@ function turnVideoObjectToHTML(videoPOJO) {
         videoDeleteButton.className = "review-mod-btn"  
         videoDeleteButton.addEventListener('click', function(e){
             e.preventDefault();
-            deleteVideoObject(videoPOJO.id, newVideoDiv)
+            deleteVideoObject(videoPOJO.id)
         })
     
     let updateDiv = document.createElement('div')
@@ -208,7 +208,7 @@ function turnVideoObjectToHTML(videoPOJO) {
 }
 
 // ADD NEW REVIEW TO VIDEO IN EXPANDED VIEW
-function addReviewToExpandedView(reviewString, reviewIndexNum, objectIdNum, videoDiv) {
+function addReviewToExpandedView(reviewString, reviewIndexNum, objectIdNum) {
     let reviewLi = document.createElement("li") // CREATE MASTER REVIEW <LI>
 
     let deleteReviewButton = document.createElement('button')
@@ -216,7 +216,7 @@ function addReviewToExpandedView(reviewString, reviewIndexNum, objectIdNum, vide
         deleteReviewButton.dataset.id = reviewIndexNum
         deleteReviewButton.className = 'review-delete-btn'
         deleteReviewButton.addEventListener('click', () => {
-            deleteVideoReview(objectIdNum, reviewIndexNum, reviewLi, videoDiv)
+            deleteVideoReview(objectIdNum, reviewIndexNum, reviewLi)
         })
 
     reviewLi.append(`${reviewString} `, deleteReviewButton) // ADD ELEMENTS TO MASTER REVIEW <LI>
@@ -250,20 +250,17 @@ function openExpandedView(videoPOJO, videoDiv) {
 }
 
  // DELETE A VIDEO OBJECT
-function deleteVideoObject(videoIdNum, divToDelete) {
-  let deleteConfig = {
-    method: "DELETE"
-    }
-    console.log(`${databaseURL}/${videoIdNum}`, deleteConfig)
-  fetch(`${databaseURL}/${videoIdNum}`, deleteConfig)
-      .then(() => {
+function deleteVideoObject(videoIdNum) {
+    setTimeout(() => fetch(`${databaseURL}/${videoIdNum}`, {method: "DELETE"})
+    .then(function() {
         delete localDatabase[videoIdNum];
-        divToDelete.remove()
-      })
+        document.querySelector(`div[data-id="${videoIdNum}"]`).remove()
+  }), 250)
+    
 }
 
  // DELETE A REVIEW
- function deleteVideoReview(objectIdNum, reviewIndexNum, reviewLiElement, videoDivElement) {
+ function deleteVideoReview(objectIdNum, reviewIndexNum, reviewLiElement) {
     let newArray = [...localDatabase[objectIdNum].reviews]
     newArray.splice(reviewIndexNum, 1)
     let patchConfig = {
@@ -277,9 +274,9 @@ function deleteVideoObject(videoIdNum, divToDelete) {
         .then(res => res.json())
         .then(updatedObject => {
             if (updatedObject.reviews.length === 0) {
-                deleteVideoObject(objectIdNum,videoDivElement)
+                deleteVideoObject(objectIdNum)
                 reviewLiElement.remove()
-                videoDivElement.remove()
+                // videoDivElement.remove()
                 expandedViewDiv.style.display = 'none'
                 isExpandedViewOpen = false
             } else {
