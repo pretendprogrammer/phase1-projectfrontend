@@ -21,6 +21,7 @@ const linkToYTVideo = 'https://www.youtube.com/watch?v='
 let localDatabase = {}
 const API_KEY = config.MY_SECRET_API_KEY
 let isExpandedViewOpen
+let reviewArgumentsArray = []
 
 // INITIAL FETCH TO POPULATE FROM EXISTING DATABASE
 function initialFetch() {
@@ -77,59 +78,45 @@ function processSearch(queryText) {
 }
 
 // UPON SELECTION, BRING CHOSEN VIDEO INTO FORM ON THE DOM, ADD LISTENERS TO:
-function populateReviewForm(thumbnailString, titleString, videoIdString, channelIdString, method, videoIdNum, reviewElement) {
+function populateReviewForm(thumbnailString, titleString, videoIdString, channelIdString, method, videoIdNum) {
     resultsDiv.style.display = 'None'
     reviewToEnterDiv.style.display = 'flex'
     titleOfVideoToReview.innerText = titleString
     imageOfVideoToReview.src = thumbnailString
-    method === 'update' ? reviewForm['review-input'].value = reviewElement.innerText : reviewForm['review-input'].value = ''
-    reviewForm.addEventListener('submit', function(event){
-        event.preventDefault()
-        if (method === 'update') { // MODIFY EXISTING REVIEW
-            let patchConfig = {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({"reviews": [event.target["review-input"].value]})
-            }
-            fetch(`${databaseURL}/${videoIdNum}`, patchConfig)
-                .then(res => res.json())
-                .then(updatedObject => {
-                    localDatabase[videoIdNum].reviews = updatedObject.reviews
-                    reviewElement.innerText = updatedObject.reviews[0]
-                    reviewForm.reset()
-                    reviewToEnterDiv.style.display = 'none'
-                })
-        } else if (method === 'add') { // ADD NEW REVIEW
-            let patchConfig = {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({"reviews": [...localDatabase[videoIdNum].reviews, event.target["review-input"].value]})
-            }
-            fetch(`${databaseURL}/${videoIdNum}`, patchConfig)
-                .then(res => res.json())
-                .then(updatedObject => {
-                    localDatabase[videoIdNum].reviews = updatedObject.reviews
-                    reviewForm.reset()
-                    reviewToEnterDiv.style.display = 'none'
-                    addReviewToExpandedView(localDatabase[videoIdNum].reviews[localDatabase[videoIdNum].reviews.length -1],null,videoIdNum)
-                })
-        } else { // MAKE FIRST REVIEW
-            let newVideoPOJO = {
-                "title": titleString,
-                "channel": channelIdString,
-                "videoID": videoIdString,
-                "image": thumbnailString,
-                "likes": 0,
-                "reviews": [event.target["review-input"].value]
-                }
-            postVideoPOJO(newVideoPOJO)
-        }
-    })
+    reviewArgumentsArray = [thumbnailString, titleString, videoIdString, channelIdString, method, videoIdNum]
 }
+
+// LISTNER TO SUBMIT EVENT ON REVIEW FORM
+reviewForm.addEventListener('submit', function(event){
+    event.preventDefault()
+    if (reviewArgumentsArray[4] === 'add') { // ADD NEW REVIEW
+        let patchConfig = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({"reviews": [...localDatabase[reviewArgumentsArray[5]].reviews, event.target["review-input"].value]})
+        }
+        fetch(`${databaseURL}/${reviewArgumentsArray[5]}`, patchConfig)
+            .then(res => res.json())
+            .then(updatedObject => {
+                localDatabase[reviewArgumentsArray[5]].reviews = updatedObject.reviews
+                reviewForm.reset()
+                reviewToEnterDiv.style.display = 'none'
+                addReviewToExpandedView(localDatabase[reviewArgumentsArray[5]].reviews[localDatabase[reviewArgumentsArray[5]].reviews.length -1],null,reviewArgumentsArray[5])
+            })
+    } else { // MAKE FIRST REVIEW
+        let newVideoPOJO = {
+            "title": reviewArgumentsArray[1],
+            "channel": reviewArgumentsArray[3],
+            "videoID": reviewArgumentsArray[2],
+            "image": reviewArgumentsArray[0],
+            "likes": 0,
+            "reviews": [event.target["review-input"].value]
+            }
+        postVideoPOJO(newVideoPOJO)
+    }
+})
 
 //FUNCTION TO ADD VIDEO TO BACKEND, MEMORY, AND DOM
 function postVideoPOJO(videoObject) {
@@ -152,6 +139,7 @@ function postVideoPOJO(videoObject) {
 // CREATE VISUAL ELEMENTS FROM OBJECTS OF VIDEO INFORMATION
 function turnVideoObjectToHTML(videoPOJO) {
     let newVideoDiv = document.createElement("div") // CREATE MASTER DIV
+        newVideoDiv.dataset.id = videoPOJO.id
 
     let newThumbnail = document.createElement("img")
         newThumbnail.src = videoPOJO.image
