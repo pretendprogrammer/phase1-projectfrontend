@@ -214,7 +214,7 @@ function addReviewToExpandedView(reviewString, reviewIndexNum, objectIdNum, vide
     let deleteReviewButton = document.createElement('button')
         deleteReviewButton.innerText = 'Delete'
         deleteReviewButton.dataset.id = reviewIndexNum
-        deleteReviewButton.classname = 'review-delete-btn'
+        deleteReviewButton.className = 'review-delete-btn'
         deleteReviewButton.addEventListener('click', () => {
             deleteVideoReview(objectIdNum, reviewIndexNum, reviewLi, videoDiv)
         })
